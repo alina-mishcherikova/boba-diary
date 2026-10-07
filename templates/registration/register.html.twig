@@ -1,0 +1,71 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Register{% endblock %}
+
+{% block stylesheets %}
+    <style type="text/css">
+    .regestration-form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+        }
+        .rows { display: flex; flex-direction: column; gap: 20px; margin-bottom: 20px; }
+        .form-input {
+            display:flex;
+            gap:.5rem;
+            flex-direction:column;
+            color: #17161A;
+    
+        }
+        .form-input input {
+            display: flex;
+            padding: 13px 15px;
+            justify-content: center;
+            align-items: flex-start;
+            align-self: stretch;
+            width: 100%;
+            border-radius: var(--cds-font-size-prose--sm--textsm, 14px);
+            border: var(--cds-ring-hairline, 1px) solid var(--color-orange-85, #dfdbd1);
+            background: var(--color-grey-98, #fbfaf7);
+        }
+    </style>
+{% endblock %}
+{% block body %}
+{{ parent() }}
+    {% for flash_error in app.flashes('verify_email_error') %}
+        <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
+    {% endfor %}
+
+    <section class="regestration-form">
+    <h1>Register</h1>
+
+    {{ form_errors(registrationForm, {attr: {class: 'alert alert-danger'}}) }}
+
+    {{ form_start(registrationForm) }}
+    <div class="rows">
+        {{ form_row(registrationForm.email, {
+            label: 'Contact Email',
+            label_attr: {class: 'required'},
+            attr: {placeholder: 'user@example.com'},
+            row_attr: {class: 'form-input'}
+        }) }}
+        {{ form_row(registrationForm.username, {
+            label: 'Username',
+            label_attr: {class: 'required'},
+            attr: {placeholder: 'user'},
+            row_attr: {class: 'form-input'}
+        }) }}
+        {{ form_row(registrationForm.plainPassword, {
+            label: 'Password',
+            label_attr: {class: 'required'},
+            attr: {placeholder: '********'},
+            row_attr: {class: 'form-input'}
+        }) }}
+        {{ form_row(registrationForm.agreeTerms) }}
+    </div>
+        <button type="submit" class="btn btn-full">Register</button>
+    {{ form_end(registrationForm) }}
+    </section>
+{% endblock %}

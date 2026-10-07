@@ -1,0 +1,52 @@
+@font-face {
+    font-family: "DM Sans";
+    src: url("../fonts/DMSans-VariableFont_opsz-wght.ttf") format("truetype");
+    font-weight: 100 1000;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "DM Sans";
+    src: url("../fonts/DMSans-Italic-VariableFont_opsz-wght.ttf")
+        format("truetype");
+    font-weight: 100 1000;
+    font-style: italic;
+    font-display: swap;
+}
+
+body {
+    font-family: "DM Sans", sans-serif;
+}
+
+.btn {
+    display: inline-flex;
+    box-sizing: border-box;
+    padding: 12px 20px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border: 0;
+    border-radius: 999px;
+    background: #c9f27a;
+    cursor: pointer;
+}
+.btn-full {
+    width: 100%;
+}
+
+.regestration-form form {
+    width: 25rem;
+}
+.alert {
+    padding: 1rem;
+    border-radius: 0.5rem;
+    background-color: #f8d7da;
+    color: #721c24;
+}
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+}
