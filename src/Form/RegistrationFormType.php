@@ -29,6 +29,16 @@ class RegistrationFormType extends AbstractType
                     ),
                 ],
             ])
+             ->add('name', TextType::class, [
+                'constraints' => [
+                    new NotBlank(
+                        message: 'Please enter a name',
+                    ),
+                    new Length(
+                        max: 255,
+                    ),
+                ],
+            ])
             ->add('agreeTerms', CheckboxType::class, [
                 'mapped' => false,
                 'constraints' => [

@@ -21,12 +21,21 @@
             attr: {placeholder: 'user@example.com'},
             row_attr: {class: 'form-input'}
         }) }}
+        
         {{ form_row(registrationForm.username, {
             label: 'Username',
             label_attr: {class: 'required'},
             attr: {placeholder: 'user'},
             row_attr: {class: 'form-input'}
         }) }}
+
+        {{ form_row(registrationForm.name, {
+            label: 'Name',
+            label_attr: {class: 'required'},
+            attr: {placeholder: 'John Doe'},
+            row_attr: {class: 'form-input'}
+        }) }}
+
         {{ form_row(registrationForm.plainPassword, {
             label: 'Password',
             label_attr: {class: 'required'},
