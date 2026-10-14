@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -50,6 +52,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 255)]
     private ?string $name = null;
+
+    /**
+     * @var Collection<int, BubbleTea>
+     */
+    #[ORM\OneToMany(targetEntity: BubbleTea::class, mappedBy: 'created_by')]
+    private Collection $bubbleTeas;
+
+    public function __construct()
+    {
+        $this->bubbleTeas = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -194,6 +207,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setName(string $name): static
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, BubbleTea>
+     */
+    public function getBubbleTeas(): Collection
+    {
+        return $this->bubbleTeas;
+    }
+
+    public function addBubbleTea(BubbleTea $bubbleTea): static
+    {
+        if (!$this->bubbleTeas->contains($bubbleTea)) {
+            $this->bubbleTeas->add($bubbleTea);
+            $bubbleTea->setCreatedBy($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBubbleTea(BubbleTea $bubbleTea): static
+    {
+        if ($this->bubbleTeas->removeElement($bubbleTea)) {
+            // set the owning side to null (unless already changed)
+            if ($bubbleTea->getCreatedBy() === $this) {
+                $bubbleTea->setCreatedBy(null);
+            }
+        }
 
         return $this;
     }

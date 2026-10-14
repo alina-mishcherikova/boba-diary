@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
 use App\Repository\StoreRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: StoreRepository::class)]
@@ -36,11 +38,24 @@ class Store
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $inactivated_at = null;
 
-    #[ORM\Column]
-    private ?int $created_by = null;
 
     #[ORM\Column]
     private ?\DateTimeImmutable $created_at = null;
+
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $created_by = null;
+
+    /**
+     * @var Collection<int, StoreBubbleTea>
+     */
+    #[ORM\OneToMany(targetEntity: StoreBubbleTea::class, mappedBy: 'store_id')]
+    private Collection $storeBubbleTeas;
+
+    public function __construct()
+    {
+        $this->storeBubbleTeas = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -131,17 +146,6 @@ class Store
         return $this;
     }
 
-    public function getCreatedBy(): ?int
-    {
-        return $this->created_by;
-    }
-
-    public function setCreatedBy(int $created_by): static
-    {
-        $this->created_by = $created_by;
-
-        return $this;
-    }
 
     public function getCreatedAt(): ?\DateTimeImmutable
     {
@@ -151,6 +155,49 @@ class Store
     public function setCreatedAt(\DateTimeImmutable $created_at): static
     {
         $this->created_at = $created_at;
+
+        return $this;
+    }
+
+
+    public function getCreatedBy(): ?User
+    {
+        return $this->created_by;
+    }
+
+    public function setCreatedBy(?User $created_by): static
+    {
+        $this->created_by = $created_by;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, StoreBubbleTea>
+     */
+    public function getStoreBubbleTeas(): Collection
+    {
+        return $this->storeBubbleTeas;
+    }
+
+    public function addStoreBubbleTea(StoreBubbleTea $storeBubbleTea): static
+    {
+        if (!$this->storeBubbleTeas->contains($storeBubbleTea)) {
+            $this->storeBubbleTeas->add($storeBubbleTea);
+            $storeBubbleTea->setStoreId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeStoreBubbleTea(StoreBubbleTea $storeBubbleTea): static
+    {
+        if ($this->storeBubbleTeas->removeElement($storeBubbleTea)) {
+            // set the owning side to null (unless already changed)
+            if ($storeBubbleTea->getStoreId() === $this) {
+                $storeBubbleTea->setStoreId(null);
+            }
+        }
 
         return $this;
     }
