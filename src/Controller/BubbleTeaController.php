@@ -30,9 +30,7 @@ final class BubbleTeaController extends AbstractController
 
             $entityManager->persist($bubbleTea);
             $entityManager->flush();
-
-            $this->addFlash('success', 'Bubble tea created!');
-
+            
             return $this->redirectToRoute('app_profile');
         }
 

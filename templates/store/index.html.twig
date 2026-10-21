@@ -1,0 +1,65 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello StoreController!{% endblock %}
+
+{% block body %}
+
+  <section class="form">
+  <h1>Create a bubble tea store</h1>
+
+{% for message in app.flashes('success') %}
+        <p role="status">{{ message }}</p>
+    {% endfor %}
+
+   {{ form_start(form) }}
+        {{ form_errors(form) }}
+
+        <div class="rows">
+         {{ form_row(form.name, {
+            label: 'Name',
+            label_attr: {class: 'required'},
+            attr: {placeholder: 'Enter the name'},
+            row_attr: {class: 'form-input'}
+        }) }}
+        </div>
+
+        <div class="rows">
+         {{ form_row(form.address, {
+            label: 'Address',
+            label_attr: {class: 'required'},
+            attr: {placeholder: 'Enter the address of the bubble tea store'},
+            row_attr: {class: 'form-input'}
+        }) }}
+        </div>  
+
+        <div class="rows">
+         {{ form_row(form.city, {
+            label: 'City',
+            label_attr: {class: 'required'},
+            attr: {placeholder: 'Enter the city'},
+            row_attr: {class: 'form-input'}
+        }) }}
+        </div>
+
+        <div class="rows">
+         {{ form_row(form.country, {
+            label: 'Country',
+            label_attr: {class: 'required'},
+            attr: {placeholder: 'Enter the country'},
+            row_attr: {class: 'form-input'}
+        }) }}
+        </div>
+
+         <div class="rows">
+         {{ form_row(form.postal_code, {
+            label: 'Postal Code',
+            label_attr: {class: 'required'},
+            attr: {placeholder: 'Enter the postal code'},
+            row_attr: {class: 'form-input'}
+        }) }}
+        </div>
+        <button type="submit" class="btn btn-primary btn-full">Save</button>
+    {{ form_end(form) }}
+        </div>
+   </section>
+{% endblock %}

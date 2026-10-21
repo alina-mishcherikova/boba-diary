@@ -57,6 +57,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @var Collection<int, BubbleTea>
      */
     #[ORM\OneToMany(targetEntity: BubbleTea::class, mappedBy: 'created_by')]
+    #[ORM\OrderBy(['created_at' => 'DESC', 'id' => 'DESC'])]
     private Collection $bubbleTeas;
 
     public function __construct()

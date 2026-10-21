@@ -15,6 +15,6 @@
             <li>Less ice</li>
             <li class="diary-tag-topping">Tapioca</li>
         </ul> #}
-        <time class="diary-entry-date">{{ bubbleTea.createdAt|date('d M Y') }}</time>
+        <time class="diary-entry-date">{{ bubbleTea.createdAt|date('d/m/Y H:i', 'Europe/Paris')}}</time>
     </div>
 </article>
