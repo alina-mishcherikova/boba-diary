@@ -1,2 +1,610 @@
-/* Include the shared styles and fonts in Encore's versioned build. */
-@import "../../public/css/app.css";
+@font-face {
+    font-family: "DM Sans";
+    src: url("../fonts/DMSans-VariableFont_opsz-wght.ttf") format("truetype");
+    font-weight: 100 1000;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "DM Sans";
+    src: url("../fonts/DMSans-Italic-VariableFont_opsz-wght.ttf")
+        format("truetype");
+    font-weight: 100 1000;
+    font-style: italic;
+    font-display: swap;
+}
+@font-face {
+    font-family: "Bricolage Grotesque";
+    src: url("../fonts/BricolageGrotesque-VariableFont_opsz,wdth,wght.ttf")
+        format("truetype");
+    font-weight: 100 1000;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "DM Mono";
+    src: url("../fonts/DMMono-Medium.ttf") format("truetype");
+    font-weight: 500;
+    font-display: swap;
+}
+
+body {
+    margin: 0;
+    font-family: "DM Sans", sans-serif;
+    background-color: #fbfaf7 !important;
+}
+
+.btn {
+    font:
+        500 14px/1.2 "DM Sans",
+        sans-serif;
+    color: #17161a;
+    text-decoration: none;
+    display: inline-flex;
+    box-sizing: border-box;
+    padding: 12px 20px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border: 0;
+    border-radius: 999px;
+    cursor: pointer;
+}
+.btn-primary {
+    background: #c9f27a;
+}
+.btn-secondary {
+    border: 1px solid #dfdbd1;
+    background: #fff;
+}
+.btn-full {
+    width: 100%;
+}
+
+.regestration-form,
+.login-form,
+.form {
+    width: 25rem;
+}
+.alert {
+    padding: 1rem;
+    border-radius: 0.5rem;
+    background-color: #f8d7da;
+    color: #721c24;
+}
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+}
+
+.regestration-form,
+.login-form,
+.form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+}
+.rows {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+.form-input {
+    display: flex;
+    gap: 0.5rem;
+    flex-direction: column;
+    color: #17161a;
+}
+.form-input input,
+.form-input textarea {
+    box-sizing: border-box;
+    font: inherit;
+    display: flex;
+    padding: 13px 15px;
+    justify-content: center;
+    align-items: flex-start;
+    align-self: stretch;
+    width: 100%;
+    border-radius: var(--cds-font-size-prose--sm--textsm, 14px);
+    border: var(--cds-ring-hairline, 1px) solid var(--color-orange-85, #dfdbd1);
+    background: var(--color-grey-98, #fbfaf7);
+}
+
+.form-input textarea {
+    min-height: 140px;
+    resize: vertical;
+}
+
+.form-input input:focus-visible,
+.form-input textarea:focus-visible {
+    outline: 2px solid #7a3e96;
+    outline-offset: 2px;
+}
+
+.form {
+    width: min(25rem, calc(100% - 40px));
+    margin: 40px auto;
+    align-items: stretch;
+}
+
+.form h1 {
+    margin: 0;
+    font-family: "Bricolage Grotesque", sans-serif;
+}
+
+.profile_name {
+    color: #17161a;
+    font-family: "Bricolage Grotesque", sans-serif;
+    font-size: 44px;
+    font-weight: 500;
+    line-height: 44px;
+    letter-spacing: -1.32px;
+}
+.profile_info {
+    color: #6b6875;
+    font-family: "DM Mono", monospace;
+    font-size: 11px;
+    font-weight: 500;
+    line-height: 19.8px; /* 180% */
+    letter-spacing: 0.88px;
+    text-transform: uppercase;
+}
+
+/* Boba diary home — Figma frame 83:20. */
+.diary-header,
+.diary-main,
+.diary-header *,
+.diary-main * {
+    box-sizing: border-box;
+}
+
+.diary-header {
+    display: flex;
+    align-items: center;
+    gap: 58px;
+    min-height: 83px;
+    padding: 20px 56px;
+    border-bottom: 1px solid #eae7df;
+}
+
+.diary-brand {
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+    gap: 9px;
+    color: #17161a;
+    font:
+        500 19px/1 "Bricolage Grotesque",
+        sans-serif;
+    letter-spacing: -0.57px;
+    text-decoration: none;
+}
+
+.diary-brand-dots {
+    display: flex;
+    gap: 3px;
+}
+
+.diary-brand-dots span {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #7a3e96;
+}
+
+.diary-brand-dots span:nth-child(2) {
+    background: #f0642a;
+}
+.diary-brand-dots span:nth-child(3) {
+    background: #17161a;
+}
+
+.diary-nav,
+.diary-header-actions,
+.header-actions {
+    display: flex;
+    align-items: center;
+}
+
+.diary-nav {
+    gap: 26px;
+}
+
+.diary-nav a,
+.diary-nav button {
+    border: 0;
+    border-bottom: 2px solid transparent;
+    background: none;
+    color: #6b6875;
+    font:
+        400 14px/1.2 "DM Sans",
+        sans-serif;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.diary-nav .diary-nav-active {
+    border-bottom-color: #7a3e96;
+    color: #17161a;
+    font-weight: 500;
+}
+
+.diary-header-actions {
+    margin-left: auto;
+    gap: 14px;
+}
+
+.header-actions {
+    gap: 12px;
+}
+
+.diary-search {
+    position: relative;
+    display: block;
+    width: 230px;
+}
+
+.diary-search input {
+    width: 100%;
+    height: 40px;
+    padding: 10px 14px 10px 38px;
+    border: 1px solid #eae7df;
+    border-radius: 999px;
+    background: #fff;
+    color: #17161a;
+    font:
+        400 13px/1.2 "DM Sans",
+        sans-serif;
+}
+
+.diary-search input::placeholder {
+    color: #757575;
+    opacity: 1;
+}
+
+.diary-search-icon {
+    position: absolute;
+    top: 12px;
+    left: 14px;
+    width: 14px;
+    height: 14px;
+    border: 1px solid #6b6875;
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+.photo-placeholder {
+    background: #dedede;
+}
+
+.diary-avatar {
+    display: block;
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    border: 1px solid #d4d4d4;
+    border-radius: 4px;
+}
+
+.diary-main {
+    padding: 44px 56px 56px;
+    color: #17161a;
+}
+
+.diary-main p,
+.diary-main h1,
+.diary-main h2,
+.diary-main h3 {
+    margin: 0;
+}
+
+.diary-eyebrow,
+.diary-entry-count,
+.diary-entry-store,
+.diary-entry-date {
+    color: #6b6875;
+    font-family: "DM Mono", monospace;
+    font-weight: 500;
+    text-transform: uppercase;
+}
+
+.diary-eyebrow {
+    font-size: 11px;
+    line-height: 11px;
+    letter-spacing: 0.99px;
+}
+
+.diary-greeting h1 {
+    margin-top: 15px;
+    font:
+        500 62px/0.98 "Bricolage Grotesque",
+        sans-serif;
+    font-variation-settings:
+        "opsz" 14,
+        "wdth" 100;
+    letter-spacing: -1.86px;
+}
+
+.diary-greeting-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 26px;
+}
+
+.diary-greeting-actions .btn {
+    min-height: 54px;
+    padding: 16px 26px;
+    font-size: 15px;
+}
+
+.diary-recent {
+    margin-top: 52px;
+    scroll-margin-top: 24px;
+}
+
+.diary-section-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.diary-section-title {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+}
+
+.diary-section-title h2 {
+    font:
+        500 30px/1 "Bricolage Grotesque",
+        sans-serif;
+    letter-spacing: -0.75px;
+}
+
+.diary-entry-count {
+    font-size: 10px;
+    line-height: 1;
+    letter-spacing: 0.9px;
+}
+
+.diary-all-entries {
+    flex-shrink: 0;
+    color: #7a3e96;
+    font-size: 13px;
+    font-weight: 500;
+    text-decoration: none;
+}
+
+.diary-entry-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 22px;
+}
+
+.diary-entry {
+    overflow: hidden;
+    border: 1px solid #eae7df;
+    border-radius: 24px;
+    background: #fff;
+    padding-bottom: 22px;
+}
+
+.diary-entry-photo {
+    height: 186px;
+}
+.diary-entry-content {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+}
+
+.diary-entry-heading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.diary-entry-heading h3 {
+    font:
+        500 20px/23px "Bricolage Grotesque",
+        sans-serif;
+    letter-spacing: -0.4px;
+}
+
+.diary-rating {
+    display: flex;
+    flex-shrink: 0;
+    gap: 4px;
+}
+.diary-rating span {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: #7a3e96;
+}
+.diary-rating .diary-rating-half {
+    background: linear-gradient(to right, #7a3e96 50%, #e3e0d8 50%);
+}
+
+.diary-entry .diary-entry-store {
+    margin-top: 5px;
+    font-size: 10px;
+    line-height: 16px;
+    letter-spacing: 0.7px;
+}
+
+.diary-entry .diary-entry-note {
+    margin-top: 11px;
+    color: #4a4750;
+    font-size: 13.5px;
+    line-height: 20.93px;
+}
+
+.diary-entry-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 14px 0 16px;
+    padding: 0;
+    list-style: none;
+}
+
+.diary-entry-tags li {
+    padding: 6px 11px;
+    border: 1px solid #eae7df;
+    border-radius: 8px;
+    background: #fbfaf7;
+    font-size: 11.5px;
+    line-height: 15px;
+}
+
+.diary-entry-tags .diary-tag-topping {
+    border-color: #f7cfb8;
+    background: #fde8dc;
+    color: #a83f14;
+}
+.diary-entry-date {
+    display: block;
+    font-size: 10px;
+    line-height: 10px;
+}
+
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+}
+
+.diary-header a:focus-visible,
+.diary-header button:focus-visible,
+.diary-header input:focus-visible,
+.diary-main a:focus-visible,
+.diary-main button:focus-visible {
+    outline: 2px solid #7a3e96;
+    outline-offset: 4px;
+}
+.diary-all-entries:hover {
+    text-decoration: underline;
+}
+.diary-header .btn:hover,
+.diary-main .btn:hover {
+    filter: brightness(0.97);
+}
+
+@media (min-width: 1552px) {
+    .diary-header,
+    .diary-main {
+        padding-left: max(56px, calc((100% - 1328px) / 2));
+        padding-right: max(56px, calc((100% - 1328px) / 2));
+    }
+}
+
+@media (max-width: 1100px) {
+    .diary-header {
+        gap: 28px;
+        padding-right: 32px;
+        padding-left: 32px;
+    }
+    .diary-main {
+        padding-right: 32px;
+        padding-left: 32px;
+    }
+    .diary-search {
+        width: 200px;
+    }
+    .diary-entry-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 850px) {
+    .diary-header {
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+    .diary-nav {
+        margin-left: auto;
+    }
+    .diary-header-actions {
+        width: 100%;
+        margin-left: 0;
+    }
+    .diary-search {
+        flex: 1;
+        width: auto;
+    }
+}
+
+@media (max-width: 580px) {
+    .diary-header {
+        padding: 20px;
+        gap: 20px 16px;
+    }
+    .diary-brand {
+        font-size: 18px;
+    }
+    .diary-nav {
+        gap: 16px;
+    }
+    .diary-nav a,
+    .diary-nav button {
+        font-size: 13px;
+    }
+    .diary-header-actions {
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+    .diary-search {
+        flex-basis: calc(100% - 52px);
+    }
+    .diary-header-actions > .btn {
+        order: 1;
+        width: 100%;
+    }
+    .diary-main {
+        padding: 36px 20px 40px;
+    }
+    .diary-greeting h1 {
+        font-size: 44px;
+        letter-spacing: -1.32px;
+    }
+    .diary-greeting-actions {
+        gap: 10px;
+    }
+    .diary-greeting-actions .btn {
+        padding: 14px 20px;
+        font-size: 14px;
+    }
+    .diary-recent {
+        margin-top: 40px;
+    }
+    .diary-section-heading {
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+    .diary-section-title {
+        gap: 10px;
+    }
+    .diary-section-title h2 {
+        font-size: 26px;
+    }
+    .diary-entry-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}

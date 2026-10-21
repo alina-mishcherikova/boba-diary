@@ -37,5 +37,11 @@ class DashboardController extends AbstractDashboardController
             'Stores',
             'fa fa-store'
         );
+        yield MenuItem::section('Bubble Tea');
+         yield MenuItem::linkTo(
+            BubbleTeaCrudController::class,
+            'Bubble Teas',
+            'fa fa-glass'
+        );
     }
 }
