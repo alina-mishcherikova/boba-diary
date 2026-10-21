@@ -1,15 +1,28 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello ProfileController!{% endblock %}
+{% block title %}Home · boba diary{% endblock %}
 
 {% block body %}
-<style>
-
-</style>
-{{ parent() }}
-<div class="example-wrapper">
-    <img src="https://symfony.com/logos/symfony-logo.svg" alt="Symfony" />
-    <p class="profile_name">{{ app.user.name }}</p>
-    <p>{{ app.user.username }}</p>
-</div>
+  {{ parent() }}
+    <main class="diary-main">
+        <section class="diary-greeting" aria-labelledby="greeting-title">
+            <h1 id="greeting-title">Evening, {{ app.user.name }}! </h1>
+            <div class="diary-greeting-actions">
+                <button class="btn btn-primary" type="button">Add a bubble tea</button>
+                <a class="btn btn-secondary" href="#recently-sipped">Open my journal</a>
+            </div>
+        </section>
+        <section class="diary-recent" id="recently-sipped" aria-labelledby="recent-title">
+            <div class="diary-section-heading">
+                <div class="diary-section-title">
+                    <h2 id="recent-title">Recently sipped</h2>
+                    <span class="diary-entry-count">3 of 47</span>
+                </div>
+                <a class="diary-all-entries" href="#recently-sipped">All entries <span aria-hidden="true">→</span></a>
+            </div>
+            <div class="diary-entry-grid">
+                {% include 'profile/_entry_card.html.twig' %}
+            </div>
+        </section>
+    </main>
 {% endblock %}
