@@ -29,13 +29,13 @@
 
             <nav class="diary-nav" aria-label="Main navigation">
                 {% if app.user %}
-                    <a class="diary-nav-active" href="{{ path('app_profile') }}" aria-current="page">Profile</a>
+                    <a class="diary-nav" href="{{ path('app_profile') }}" >Profile</a>
                 {% endif %}
             </nav>
 
             <div class="diary-header-actions">
                 {% if app.user %}
-                    <button class="btn btn-primary" type="button">+ Add a bubble tea</button>
+                    <a class="btn btn-primary" href="{{path('app_bubble_tea')}}"> + Add a bubble tea </a>
                     <a class="diary-avatar photo-placeholder" href="{{ path('app_profile') }}" aria-label="Open profile"></a>
                 {% else %}
                     <a class="btn btn-secondary" href="{{ path('app_login') }}">Log in</a>

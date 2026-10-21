@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Create a bubble tea{% endblock %}
+
+{% block body %}
+  <section class="form">
+    <h1>Create a bubble tea</h1>
+
+    {% for message in app.flashes('success') %}
+        <p role="status">{{ message }}</p>
+    {% endfor %}
+
+    {{ form_start(form) }}
+        {{ form_errors(form) }}
+        <div class="rows">
+         {{ form_row(form.name, {
+            label: 'Name',
+            label_attr: {class: 'required'},
+            attr: {placeholder: 'Enter the name of the bubble tea'},
+            row_attr: {class: 'form-input'}
+        }) }}
+        </div>
+         <div class="rows">
+        {{ form_row(form.description, {
+            label: 'Description',
+            attr: {placeholder: 'Enter the description of the bubble tea'},
+            row_attr: {class: 'form-input'}
+        }) }}
+       </div>
+        <button type="submit" class="btn btn-primary btn-full">Save</button>
+        
+    {{ form_end(form) }}
+    </section>
+{% endblock %}

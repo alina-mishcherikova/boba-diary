@@ -8,7 +8,6 @@
         <section class="diary-greeting" aria-labelledby="greeting-title">
             <h1 id="greeting-title">Evening, {{ app.user.name }}! </h1>
             <div class="diary-greeting-actions">
-                <button class="btn btn-primary" type="button">Add a bubble tea</button>
                 <a class="btn btn-secondary" href="#recently-sipped">Open my journal</a>
             </div>
         </section>
@@ -16,12 +15,16 @@
             <div class="diary-section-heading">
                 <div class="diary-section-title">
                     <h2 id="recent-title">Recently sipped</h2>
-                    <span class="diary-entry-count">3 of 47</span>
+                    {# <span class="diary-entry-count">{bubbleTea|lenght}</span> #}
                 </div>
                 <a class="diary-all-entries" href="#recently-sipped">All entries <span aria-hidden="true">→</span></a>
             </div>
             <div class="diary-entry-grid">
-                {% include 'profile/_entry_card.html.twig' %}
+                {% for bubbleTea in bubbleTeas %}
+                    {% include 'profile/_entry_card.html.twig' with { 'bubbleTea': bubbleTea } %}
+                    {% else %}
+                    <p>You didn't add any bubble tea</p>
+                {% endfor %}
             </div>
         </section>
     </main>
