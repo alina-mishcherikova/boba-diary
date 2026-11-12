@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Register{% endblock %}
+{% block title %}Sign up{% endblock %}
 
 {% block body %}
 {{ parent() }}
@@ -9,7 +9,7 @@
     {% endfor %}
 
     <section class="regestration-form">
-    <h1>Register</h1>
+    <h1>Sign up</h1>
 
     {{ form_errors(registrationForm, {attr: {class: 'alert alert-danger'}}) }}
 
@@ -45,7 +45,7 @@
         {{ form_row(registrationForm.isOwner) }}
         {{ form_row(registrationForm.agreeTerms) }}
     </div>
-        <button type="submit" class="btn btn-primary btn-full">Register</button>
+        <button type="submit" class="btn btn-primary btn-full">Create Account</button>
     {{ form_end(registrationForm) }}
     </section>
 {% endblock %}
