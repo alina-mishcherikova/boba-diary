@@ -1,12 +1,12 @@
 
-<article class="diary-entry" aria-labelledby="entry-title">
+<a class="diary-entry" aria-labelledby="entry-title">
     {# <div class="diary-entry-photo photo-placeholder" role="img" aria-label="Drink photo placeholder"></div> #}
     <div class="diary-entry-content">
         <div class="diary-entry-heading">
             <h3 id="entry-title">{{ bubbleTea.name }}</h3>
             <p>{{bubbleTea.description}}</p>
             {# <span class="diary-rating" role="img" class="diary-rating-half"></span>
-            </span>
+            </span>#}
         </div>
         {# <p class="diary-entry-store">Bubble House · Brooklyn</p> #}
         {# <p class="diary-entry-note">“Nutty, not too sweet — the pearls were perfect that day.”</p> #}
@@ -17,4 +17,4 @@
         </ul> #}
         <time class="diary-entry-date">{{ bubbleTea.createdAt|date('d/m/Y H:i', 'Europe/Paris')}}</time>
     </div>
-</article>
+</a>

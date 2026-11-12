@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ store.name }} · Menu{% endblock %}
+
+{% block body %}
+    <main class="diary-main">
+        <a href="{{ path('app_my_locations') }}">Back to my locations</a>
+        <h1>{{ store.name }} · Menu</h1>
+
+        {% for message in app.flashes('success') %}
+            <p role="status">{{ message }}</p>
+        {% endfor %}
+
+        <section class="diary-recent" aria-label="Menu items">
+            {% for item in items %}
+                <article class="diary-entry">
+                    <div class="diary-entry-content">
+                        <h2>{{ item.bubbleTea.name }}</h2>
+                        <p>{{ item.price|number_format(2, '.', '') }} {{ item.currency ? item.currency.code : '' }}</p>
+                        <p>{{ item.available ? 'Available' : 'Unavailable' }}</p>
+                    </div>
+                </article>
+            {% else %}
+                <p>Your menu is empty. Add your first drink below.</p>
+            {% endfor %}
+        </section>
+
+        <section class="form store-form">
+            <h2>Add a drink</h2>
+            <p>Choose an existing drink, or <a href="{{ path('app_bubble_tea') }}">create a new drink</a> first.</p>
+            {{ form_start(form) }}
+                {{ form_errors(form) }}
+                <div class="rows">
+                    {{ form_row(form.bubbleTea, {label: 'Drink', row_attr: {class: 'form-input'}}) }}
+                    {{ form_row(form.price, {row_attr: {class: 'form-input'}}) }}
+                    {{ form_row(form.currency, {row_attr: {class: 'form-input'}}) }}
+                    {{ form_row(form.is_available) }}
+                </div>
+                <button type="submit" class="btn btn-primary btn-full">Add to menu</button>
+            {{ form_end(form) }}
+        </section>
+    </main>
+{% endblock %}

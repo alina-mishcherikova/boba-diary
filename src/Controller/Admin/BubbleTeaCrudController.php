@@ -28,7 +28,7 @@ class BubbleTeaCrudController extends AbstractCrudController
 
         return (new BubbleTea())
             ->setCreatedAt(new \DateTimeImmutable())
-            ->setCreatedBy($user->getId());
+            ->setCreatedBy($user);
     }
 
     public function configureFields(string $pageName): iterable

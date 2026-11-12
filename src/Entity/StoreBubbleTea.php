@@ -3,12 +3,31 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Post;
 use App\Repository\StoreBubbleTeaRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: StoreBubbleTeaRepository::class)]
-#[ApiResource]
+#[ApiResource(operations: [
+    new Get(),
+    new GetCollection(),
+    new Post(
+        security: "is_granted('ROLE_OWNER')",
+        securityPostDenormalize: "is_granted('STORE_MANAGE', object.getStoreId())",
+        extraProperties: ['throw_on_access_denied' => true],
+    ),
+    new Patch(
+        security: "is_granted('STORE_MANAGE', object.getStoreId())",
+        securityPostDenormalize: "is_granted('STORE_MANAGE', object.getStoreId())",
+        extraProperties: ['throw_on_access_denied' => true],
+    ),
+    new Delete(security: "is_granted('STORE_MANAGE', object.getStoreId())"),
+])]
 class StoreBubbleTea
 {
     #[ORM\Id]

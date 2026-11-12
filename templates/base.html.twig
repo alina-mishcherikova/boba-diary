@@ -30,13 +30,18 @@
             <nav class="diary-nav" aria-label="Main navigation">
                 {% if app.user %}
                     <a class="diary-nav" href="{{ path('app_profile') }}" >Profile</a>
+                    {% if is_granted('ROLE_OWNER') %}
+                        <a href="{{ path('app_my_locations') }}">My locations</a>
+                    {% endif %}
                 {% endif %}
             </nav>
 
             <div class="diary-header-actions">
                 {% if app.user %}
                     <a class="btn btn-primary" href="{{path('app_bubble_tea')}}"> + Add a bubble tea </a>
-                     <a class="btn btn-primary" href="{{path('app_store')}}"> + Add a store </a>
+                    {% if is_granted('ROLE_OWNER') %}
+                        <a class="btn btn-primary" href="{{ path('app_store') }}">+ Add a location</a>
+                    {% endif %}
                     <a class="diary-avatar photo-placeholder" href="{{ path('app_profile') }}" aria-label="Open profile"></a>
                 {% else %}
                     <a class="btn btn-secondary" href="{{ path('app_login') }}">Log in</a>

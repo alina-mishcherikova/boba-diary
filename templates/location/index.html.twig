@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}My locations · boba diary{% endblock %}
+
+{% block body %}
+    <main class="diary-main">
+        <div class="diary-section-heading">
+            <h1>My locations</h1>
+            <a class="btn btn-primary" href="{{ path('app_store') }}">Add a location</a>
+        </div>
+        <div class="diary-entry-grid">
+            {% for store in stores %}
+                <article class="diary-entry">
+                    <div class="diary-entry-content">
+                        <h2>{{ store.name }}</h2>
+                        <p>{{ store.address }}, {{ store.city }}</p>
+                        <a href="{{ path('app_location_menu', {id: store.id}) }}">Manage menu</a>
+                    </div>
+                </article>
+            {% else %}
+                <p>You have no locations yet. Add your first location to start building its menu.</p>
+            {% endfor %}
+        </div>
+    </main>
+{% endblock %}

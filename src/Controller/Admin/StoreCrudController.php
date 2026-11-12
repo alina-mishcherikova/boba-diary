@@ -4,12 +4,11 @@ namespace App\Controller\Admin;
 
 use App\Entity\Store;
 use App\Entity\User;
-use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -29,7 +28,7 @@ class StoreCrudController extends AbstractCrudController
 
         return (new Store())
             ->setCreatedAt(new \DateTimeImmutable())
-            ->setCreatedBy($user->getId());
+            ->setCreatedBy($user);
     }
 
     public function configureFields(string $pageName): iterable
@@ -68,6 +67,8 @@ class StoreCrudController extends AbstractCrudController
             ]);
         
         yield DateTimeField::new('createdAt')->hideOnForm();
-        yield NumberField::new('createdBy')->hideOnForm();
+        yield AssociationField::new('created_by', 'Created by')
+            ->formatValue(static fn (?User $user): string => $user?->getUserIdentifier() ?? '')
+            ->hideOnForm();
     }
 }

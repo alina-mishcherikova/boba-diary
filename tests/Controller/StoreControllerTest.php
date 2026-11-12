@@ -26,6 +26,7 @@ final class StoreControllerTest extends WebTestCase
             $now = new \DateTimeImmutable();
             $user = (new User())
                 ->setEmail('creator@example.com')
+                ->setRoles(['ROLE_OWNER'])
                 ->setPassword('unused-in-this-test')
                 ->setUsername('creator')
                 ->setName('Creator')
@@ -52,11 +53,14 @@ final class StoreControllerTest extends WebTestCase
                 'store[postal_code]' => '75001',
             ]));
 
-            self::assertResponseRedirects('/profile');
+            self::assertResponseRedirects('/my-locations');
             $saved = static::getContainer()->get(EntityManagerInterface::class)
                 ->getRepository(Store::class)->findOneBy(['name' => 'Tea shop']);
             self::assertNotNull($saved);
             self::assertSame('Paris', $saved->getCity());
+            $client->followRedirect();
+            self::assertResponseIsSuccessful();
+            self::assertSelectorTextContains('main', 'Tea shop');
         } finally {
             static::ensureKernelShutdown();
             if (null === $previousEnv) {

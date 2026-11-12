@@ -6,27 +6,42 @@
   {{ parent() }}
     <main class="diary-main">
         <section class="diary-greeting" aria-labelledby="greeting-title">
-            <h1 id="greeting-title">Evening, {{ app.user.name }}! </h1>
-            <div class="diary-greeting-actions">
+            <h1>Evening, {{ app.user.name }}! </h1>
+            {# <div class="diary-greeting-actions">
                 <a class="btn btn-secondary" href="#recently-sipped">Open my journal</a>
-            </div>
+            </div> #}
+            <p>
         </section>
-        <section class="diary-recent" id="recently-sipped" aria-labelledby="recent-title">
+        <section class="diary-recent" >
+        <div class="diary-section-title">
+         <h2 id="recent-title">Drinks you added</h2>
+         </div >
+               <div >
+                {% for bubbleTea in bubbleTeas %}
+                    {% include 'profile/_added_card.html.twig' with { 'bubbleTea': bubbleTea } %}
+                    {% else %}
+                    <p>You didn't add any bubble tea</p>
+                {% endfor %}
+            </div>
+            </section>
+
+                <section class="diary-recent" id="recently-sipped" aria-labelledby="recent-title">
             <div class="diary-section-heading">
                 <div class="diary-section-title">
-                    <h2 id="recent-title">Bubble Tea created by {{ app.user.name }}</h2>
+                    <h2 id="recent-title">Recently sipped</h2>
                     {# <span class="diary-entry-count">{bubbleTea|lenght}</span> #}
                 </div>
                 <a class="diary-all-entries" href="#recently-sipped">All entries <span aria-hidden="true">→</span></a>
             </div>
-            <div class="diary-entry-grid">
+            {# <div class="diary-entry-grid">
                 {% for bubbleTea in bubbleTeas %}
                     {% include 'profile/_entry_card.html.twig' with { 'bubbleTea': bubbleTea } %}
                     {% else %}
                     <p>You didn't add any bubble tea</p>
                 {% endfor %}
-            </div>
-                    <section class="diary-recent" id="recently-sipped" aria-labelledby="recent-title">
+            </div> #}
+        </section>
+        {# <section class="diary-recent" id="recently-sipped" aria-labelledby="recent-title">
             <div class="diary-section-title">
             <h2 id="recent-title">Bubble Tea stores</h2>
             </div>
@@ -37,6 +52,6 @@
                     <p>You didn't add any store tea</p>
                 {% endfor %}
             </div>
-        </section>
+        </section> #}
     </main>
 {% endblock %}
