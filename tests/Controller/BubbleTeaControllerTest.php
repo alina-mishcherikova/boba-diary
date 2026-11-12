@@ -41,6 +41,8 @@ final class BubbleTeaControllerTest extends WebTestCase
 
             $crawler = $client->request('GET', '/bubble/tea');
             self::assertResponseIsSuccessful();
+            self::assertSelectorExists('.bubble-tea-form .rows .form-input input[name="bubble_tea[name]"]');
+            self::assertSelectorExists('.bubble-tea-form .rows .form-input textarea[name="bubble_tea[description]"]');
             self::assertSelectorExists('form button[type="submit"]');
             foreach (['image_url', 'created_at', 'inactivated_at', 'created_by'] as $field) {
                 self::assertSelectorNotExists('[name="bubble_tea['.$field.']"]');
