@@ -6,6 +6,7 @@ use App\Entity\Store;
 use App\Entity\StoreBubbleTea;
 use App\Entity\User;
 use App\Form\StoreMenuItemType;
+use App\Form\StoreType;
 use App\Repository\StoreBubbleTeaRepository;
 use App\Repository\StoreRepository;
 use App\Security\Voter\StoreVoter;
@@ -29,6 +30,25 @@ final class LocationController extends AbstractController
         ]);
     }
 
+    #[Route('/my-locations/{id}/edit', name: 'app_location_edit', methods: ['GET', 'POST'], requirements: ['id' => '\d+'])]
+    #[IsGranted(StoreVoter::MANAGE, subject: 'store')]
+    public function edit(Store $store, Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $form = $this->createForm(StoreType::class, $store);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_location_menu', ['id' => $store->getId()]);
+        }
+
+        return $this->render('store/index.html.twig', [
+            'form' => $form,
+            'page_title' => 'Edit location',
+        ]);
+    }
+
     #[Route('/my-locations/{id}/menu', name: 'app_location_menu', methods: ['GET', 'POST'], requirements: ['id' => '\d+'])]
     #[IsGranted(StoreVoter::MANAGE, subject: 'store')]
     public function menu(Store $store, Request $request, StoreBubbleTeaRepository $items, EntityManagerInterface $entityManager): Response
@@ -36,6 +56,10 @@ final class LocationController extends AbstractController
         $item = (new StoreBubbleTea())->setStoreId($store)->setIsAvailable(true);
         $form = $this->createForm(StoreMenuItemType::class, $item);
         $form->handleRequest($request);
+
+        if ($form->isSubmitted() && null === $store->getCurrency()) {
+            $form->addError(new FormError('Choose a currency for this location before adding drinks.'));
+        }
 
         if ($form->isSubmitted() && $form->isValid()) {
             if (null !== $items->findOneBy(['store_id' => $store, 'bubbleTea' => $item->getBubbleTea()])) {
