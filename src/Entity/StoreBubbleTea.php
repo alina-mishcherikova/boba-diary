@@ -36,7 +36,7 @@ class StoreBubbleTea
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'storeBubbleTeas')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(name: 'store_id', nullable: false)]
     private ?Store $store_id = null;
 
     #[ORM\ManyToOne(inversedBy: 'storeBubbleTeas')]
