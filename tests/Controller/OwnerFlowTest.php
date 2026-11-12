@@ -73,14 +73,10 @@ final class OwnerFlowTest extends WebTestCase
         self::assertSame($isOwner, in_array('ROLE_OWNER', $user->getRoles(), true));
         self::assertNotContains('ROLE_ADMIN', $user->getRoles());
 
-        $crawler = $this->client->request('GET', '/login');
-        $this->client->submit($crawler->selectButton('Sign in')->form([
-            'email' => 'new@example.com',
-            'password' => 'Password123!',
-        ]));
-        self::assertResponseRedirects('/profile');
         $this->client->followRedirect();
         self::assertResponseIsSuccessful();
+        self::assertSelectorTextContains('h1', 'New User');
+        self::assertSelectorNotExists('a[href="/login"]');
         if ($isOwner) {
             self::assertSelectorTextContains('nav a[href="/my-locations"]', 'My locations');
         } else {
@@ -90,6 +86,24 @@ final class OwnerFlowTest extends WebTestCase
         self::assertResponseStatusCodeSame($isOwner ? 200 : 403);
         $this->client->request('GET', '/store');
         self::assertResponseStatusCodeSame($isOwner ? 200 : 403);
+    }
+
+    public function testRejectedRegistrationDoesNotLogIn(): void
+    {
+        $crawler = $this->client->request('GET', '/register');
+        $this->client->submit($crawler->selectButton('Register')->form([
+            'registration_form[email]' => 'rejected@example.com',
+            'registration_form[username]' => 'rejected',
+            'registration_form[name]' => 'Rejected User',
+            'registration_form[plainPassword]' => 'Password123!',
+            'registration_form[agreeTerms]' => false,
+            'registration_form[isOwner]' => true,
+        ]));
+        self::assertSelectorTextContains('form', 'You should agree to our terms.');
+        self::assertNull(static::getContainer()->get(EntityManagerInterface::class)->getRepository(User::class)
+            ->findOneBy(['email' => 'rejected@example.com']));
+        $this->client->request('GET', '/profile');
+        self::assertResponseRedirects('/login');
     }
 
     public function testOwnerCanAddDrinkOnlyToOwnLocation(): void
