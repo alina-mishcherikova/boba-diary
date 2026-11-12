@@ -14,8 +14,8 @@
                     <div class="diary-entry-content">
                         <h2>{{ store.name }}</h2>
                         <p>{{ store.address }}, {{ store.city }}</p>
-                        <a href="{{ path('app_location_menu', {id: store.id}) }}">Manage menu</a>
-                        <a href="{{ path('app_location_edit', {id: store.id}) }}">Edit location</a>
+                        <a href="{{ path('app_location_menu', {id: store.id}) }}"><button class="btn btn-lg btn-primary btn-full" type="submit">Manage menu</button></a>
+                        <a href="{{ path('app_location_edit', {id: store.id}) }}"><button class="btn btn-lg btn-secondary btn-full" type="submit">Edit location</button></a>
                     </div>
                 </article>
             {% else %}
