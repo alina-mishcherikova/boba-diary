@@ -1,6 +1,8 @@
+/* Polices */
 @font-face {
     font-family: "DM Sans";
-    src: url("../fonts/DMSans-VariableFont_opsz-wght.ttf") format("truetype");
+    src: url("../../public/fonts/DMSans-VariableFont_opsz-wght.ttf")
+        format("truetype");
     font-weight: 100 1000;
     font-style: normal;
     font-display: swap;
@@ -8,15 +10,16 @@
 
 @font-face {
     font-family: "DM Sans";
-    src: url("../fonts/DMSans-Italic-VariableFont_opsz-wght.ttf")
+    src: url("../../public/fonts/DMSans-Italic-VariableFont_opsz-wght.ttf")
         format("truetype");
     font-weight: 100 1000;
     font-style: italic;
     font-display: swap;
 }
+
 @font-face {
     font-family: "Bricolage Grotesque";
-    src: url("../fonts/BricolageGrotesque-VariableFont_opsz,wdth,wght.ttf")
+    src: url("../../public/fonts/BricolageGrotesque-VariableFont_opsz,wdth,wght.ttf")
         format("truetype");
     font-weight: 100 1000;
     font-style: normal;
@@ -25,113 +28,106 @@
 
 @font-face {
     font-family: "DM Mono";
-    src: url("../fonts/DMMono-Medium.ttf") format("truetype");
+    src: url("../../public/fonts/DMMono-Medium.ttf") format("truetype");
     font-weight: 500;
     font-display: swap;
 }
 
+/* Styles de base */
 body {
     margin: 0;
     font-family: "DM Sans", sans-serif;
-    background-color: #fbfaf7 !important;
+    background-color: #fbfaf7;
 }
 
+/* Boutons */
 .btn {
-    font:
-        500 14px/1.2 "DM Sans",
-        sans-serif;
-    color: #17161a;
-    text-decoration: none;
     display: inline-flex;
     box-sizing: border-box;
-    padding: 12px 20px;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
+    padding: 0.75rem 1.25rem;
     border: 0;
-    border-radius: 999px;
+    border-radius: 100rem;
+    color: #17161a;
+    font:
+        500 0.875rem/1.2 "DM Sans",
+        sans-serif;
+    text-decoration: none;
     cursor: pointer;
 }
+
 .btn-primary {
     background: #c9f27a;
 }
+
 .btn-secondary {
-    border: 1px solid #dfdbd1;
+    border: 0.0625rem solid #dfdbd1;
     background: #fff;
 }
+
 .btn-full {
     width: 100%;
 }
 
+/* Formulaires : centrage horizontal du contenu */
+form,
 .regestration-form,
 .login-form,
 .form {
-    width: 25rem;
-}
-.alert {
-    padding: 1rem;
-    border-radius: 0.5rem;
-    background-color: #f8d7da;
-    color: #721c24;
-}
-.header {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem;
+    flex-direction: column;
+    max-width: 100%;
+    margin-inline: auto;
 }
 
+form,
 .regestration-form,
-.login-form,
-.form {
-    display: flex;
-    flex-direction: column;
+.login-form {
     align-items: center;
-    justify-content: center;
-    gap: 20px;
 }
-.rows {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    margin-bottom: 20px;
-}
-.form-input {
-    display: flex;
-    gap: 0.5rem;
-    flex-direction: column;
-    color: #17161a;
-}
-.form-input input,
-.form-input textarea {
+
+form > * {
     box-sizing: border-box;
-    font: inherit;
-    display: flex;
-    padding: 13px 15px;
+    max-width: 100%;
+}
+
+.regestration-form,
+.login-form {
+    width: 25rem;
     justify-content: center;
-    align-items: flex-start;
-    align-self: stretch;
+    gap: 1.25rem;
+}
+
+/* Inscription : formulaire et champs sur toute la largeur */
+.regestration-form form,
+.regestration-form .rows {
     width: 100%;
-    border-radius: var(--cds-font-size-prose--sm--textsm, 14px);
-    border: var(--cds-ring-hairline, 1px) solid var(--color-orange-85, #dfdbd1);
-    background: var(--color-grey-98, #fbfaf7);
-}
-
-.form-input textarea {
-    min-height: 140px;
-    resize: vertical;
-}
-
-.form-input input:focus-visible,
-.form-input textarea:focus-visible {
-    outline: 2px solid #7a3e96;
-    outline-offset: 2px;
 }
 
 .form {
-    width: min(25rem, calc(100% - 40px));
-    margin: 40px auto;
+    padding: 1.25rem;
+    width: min(25rem, calc(100% - 2.5rem));
+    justify-content: center;
+}
+
+.login-form {
     align-items: stretch;
+    text-align: left;
+}
+
+.bubble-tea-form,
+.bubble-tea-form form,
+.store-form,
+.store-form form {
+    align-items: stretch;
+    gap: 1.25rem;
+    text-align: left;
+}
+
+.bubble-tea-form form,
+.store-form form {
+    width: 100%;
 }
 
 .form h1 {
@@ -139,25 +135,51 @@ body {
     font-family: "Bricolage Grotesque", sans-serif;
 }
 
-.profile_name {
-    color: #17161a;
-    font-family: "Bricolage Grotesque", sans-serif;
-    font-size: 44px;
-    font-weight: 500;
-    line-height: 44px;
-    letter-spacing: -1.32px;
-}
-.profile_info {
-    color: #6b6875;
-    font-family: "DM Mono", monospace;
-    font-size: 11px;
-    font-weight: 500;
-    line-height: 19.8px; /* 180% */
-    letter-spacing: 0.88px;
-    text-transform: uppercase;
+.rows {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
 }
 
-/* Boba diary home — Figma frame 83:20. */
+.form-input {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    color: #1a1616;
+}
+
+.form-input input,
+.form-input textarea {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 0.8125rem 0.9375rem;
+    border: 0.0625rem solid #dfdbd1;
+    border-radius: 0.875rem;
+    background: #fbfaf7;
+    font: inherit;
+}
+
+.form-input textarea {
+    min-height: 8.75rem;
+    resize: vertical;
+}
+
+.form-input input:focus-visible,
+.form-input textarea:focus-visible {
+    outline: 0.125rem solid #7a3e96;
+    outline-offset: 0.125rem;
+}
+
+/* Messages d’erreur */
+.alert {
+    padding: 1rem;
+    border-radius: 0.5rem;
+    background: #f8d7da;
+    color: #721c24;
+}
+
+/* En-tête et navigation */
 .diary-header,
 .diary-main,
 .diary-header *,
@@ -168,118 +190,53 @@ body {
 .diary-header {
     display: flex;
     align-items: center;
-    gap: 58px;
-    min-height: 83px;
-    padding: 20px 56px;
-    border-bottom: 1px solid #eae7df;
+    gap: 3.625rem;
+    min-height: 5.1875rem;
+    padding: 1.25rem 3.5rem;
+    border-bottom: 0.0625rem solid #eae7df;
 }
 
 .diary-brand {
     display: inline-flex;
     flex-shrink: 0;
     align-items: center;
-    gap: 9px;
+    gap: 0.5625rem;
     color: #17161a;
     font:
-        500 19px/1 "Bricolage Grotesque",
+        500 1.1875rem/1 "Bricolage Grotesque",
         sans-serif;
-    letter-spacing: -0.57px;
+    letter-spacing: -0.035625rem;
     text-decoration: none;
 }
 
-.diary-brand-dots {
-    display: flex;
-    gap: 3px;
-}
-
-.diary-brand-dots span {
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background: #7a3e96;
-}
-
-.diary-brand-dots span:nth-child(2) {
-    background: #f0642a;
-}
-.diary-brand-dots span:nth-child(3) {
-    background: #17161a;
-}
-
 .diary-nav,
-.diary-header-actions,
-.header-actions {
+.diary-header-actions {
     display: flex;
     align-items: center;
 }
 
 .diary-nav {
-    gap: 26px;
+    gap: 1.625rem;
 }
 
-.diary-nav a,
-.diary-nav button {
+.diary-nav a {
     border: 0;
-    border-bottom: 2px solid transparent;
+    border-bottom: 0.125rem solid transparent;
     background: none;
     color: #6b6875;
     font:
-        400 14px/1.2 "DM Sans",
+        400 0.875rem/1.2 "DM Sans",
         sans-serif;
     text-decoration: none;
     cursor: pointer;
 }
 
-.diary-nav .diary-nav-active {
-    border-bottom-color: #7a3e96;
-    color: #17161a;
-    font-weight: 500;
-}
-
 .diary-header-actions {
     margin-left: auto;
-    gap: 14px;
+    gap: 0.875rem;
 }
 
-.header-actions {
-    gap: 12px;
-}
-
-.diary-search {
-    position: relative;
-    display: block;
-    width: 230px;
-}
-
-.diary-search input {
-    width: 100%;
-    height: 40px;
-    padding: 10px 14px 10px 38px;
-    border: 1px solid #eae7df;
-    border-radius: 999px;
-    background: #fff;
-    color: #17161a;
-    font:
-        400 13px/1.2 "DM Sans",
-        sans-serif;
-}
-
-.diary-search input::placeholder {
-    color: #757575;
-    opacity: 1;
-}
-
-.diary-search-icon {
-    position: absolute;
-    top: 12px;
-    left: 14px;
-    width: 14px;
-    height: 14px;
-    border: 1px solid #6b6875;
-    border-radius: 50%;
-    pointer-events: none;
-}
-
+/* Avatar */
 .photo-placeholder {
     background: #dedede;
 }
@@ -287,14 +244,15 @@ body {
 .diary-avatar {
     display: block;
     flex-shrink: 0;
-    width: 40px;
-    height: 40px;
-    border: 1px solid #d4d4d4;
-    border-radius: 4px;
+    width: 2.5rem;
+    height: 2.5rem;
+    border: 0.0625rem solid #d4d4d4;
+    border-radius: 0.25rem;
 }
 
+/* Contenu principal du journal */
 .diary-main {
-    padding: 44px 56px 56px;
+    padding: 2.75rem 3.5rem 3.5rem;
     color: #17161a;
 }
 
@@ -305,107 +263,84 @@ body {
     margin: 0;
 }
 
-.diary-eyebrow,
-.diary-entry-count,
-.diary-entry-store,
-.diary-entry-date {
-    color: #6b6875;
-    font-family: "DM Mono", monospace;
-    font-weight: 500;
-    text-transform: uppercase;
-}
-
-.diary-eyebrow {
-    font-size: 11px;
-    line-height: 11px;
-    letter-spacing: 0.99px;
-}
-
 .diary-greeting h1 {
-    margin-top: 15px;
+    margin-top: 0.9375rem;
     font:
-        500 62px/0.98 "Bricolage Grotesque",
+        500 3.875rem/0.98 "Bricolage Grotesque",
         sans-serif;
     font-variation-settings:
         "opsz" 14,
         "wdth" 100;
-    letter-spacing: -1.86px;
+    letter-spacing: -0.11625rem;
 }
 
 .diary-greeting-actions {
     display: flex;
     flex-wrap: wrap;
-    gap: 12px;
-    margin-top: 26px;
+    gap: 0.75rem;
+    margin-top: 1.625rem;
 }
 
 .diary-greeting-actions .btn {
-    min-height: 54px;
-    padding: 16px 26px;
-    font-size: 15px;
+    min-height: 3.375rem;
+    padding: 1rem 1.625rem;
+    font-size: 0.9375rem;
 }
 
+/* En-tête de la liste des entrées */
 .diary-recent {
-    margin-top: 52px;
-    scroll-margin-top: 24px;
+    margin-top: 3.25rem;
+    scroll-margin-top: 1.5rem;
 }
 
 .diary-section-heading {
     display: flex;
     justify-content: space-between;
     align-items: baseline;
-    gap: 20px;
-    margin-bottom: 20px;
+    gap: 1.25rem;
+    margin-bottom: 1.25rem;
 }
 
 .diary-section-title {
     display: flex;
     align-items: baseline;
-    gap: 14px;
+    gap: 0.875rem;
 }
 
 .diary-section-title h2 {
     font:
-        500 30px/1 "Bricolage Grotesque",
+        500 1.875rem/1 "Bricolage Grotesque",
         sans-serif;
-    letter-spacing: -0.75px;
-}
-
-.diary-entry-count {
-    font-size: 10px;
-    line-height: 1;
-    letter-spacing: 0.9px;
+    letter-spacing: -0.046875rem;
 }
 
 .diary-all-entries {
     flex-shrink: 0;
     color: #7a3e96;
-    font-size: 13px;
+    font-size: 0.8125rem;
     font-weight: 500;
     text-decoration: none;
 }
 
+/* Cartes des boissons et des boutiques */
 .diary-entry-grid {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 22px;
+    gap: 1.375rem;
 }
 
 .diary-entry {
     overflow: hidden;
-    border: 1px solid #eae7df;
-    border-radius: 24px;
+    border: 0.0625rem solid #eae7df;
+    border-radius: 1.5rem;
     background: #fff;
-    padding-bottom: 22px;
+    padding-bottom: 1.375rem;
 }
 
-.diary-entry-photo {
-    height: 186px;
-}
 .diary-entry-content {
     display: flex;
     flex-direction: column;
-    padding: 20px;
+    padding: 1.25rem;
 }
 
 .diary-entry-heading {
@@ -413,130 +348,75 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
-    gap: 12px;
+    gap: 0.75rem;
 }
 
 .diary-entry-heading h3 {
     font:
-        500 20px/23px "Bricolage Grotesque",
+        500 1.25rem/1.4375rem "Bricolage Grotesque",
         sans-serif;
-    letter-spacing: -0.4px;
+    letter-spacing: -0.025rem;
 }
 
-.diary-rating {
-    display: flex;
-    flex-shrink: 0;
-    gap: 4px;
-}
-.diary-rating span {
-    width: 9px;
-    height: 9px;
-    border-radius: 50%;
-    background: #7a3e96;
-}
-.diary-rating .diary-rating-half {
-    background: linear-gradient(to right, #7a3e96 50%, #e3e0d8 50%);
-}
-
-.diary-entry .diary-entry-store {
-    margin-top: 5px;
-    font-size: 10px;
-    line-height: 16px;
-    letter-spacing: 0.7px;
-}
-
-.diary-entry .diary-entry-note {
-    margin-top: 11px;
-    color: #4a4750;
-    font-size: 13.5px;
-    line-height: 20.93px;
-}
-
-.diary-entry-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    margin: 14px 0 16px;
-    padding: 0;
-    list-style: none;
-}
-
-.diary-entry-tags li {
-    padding: 6px 11px;
-    border: 1px solid #eae7df;
-    border-radius: 8px;
-    background: #fbfaf7;
-    font-size: 11.5px;
-    line-height: 15px;
-}
-
-.diary-entry-tags .diary-tag-topping {
-    border-color: #f7cfb8;
-    background: #fde8dc;
-    color: #a83f14;
-}
 .diary-entry-date {
+    color: #6b6875;
+    font-family: "DM Mono", monospace;
+    font-weight: 500;
+    text-transform: uppercase;
     display: block;
-    font-size: 10px;
-    line-height: 10px;
+    font-size: 0.625rem;
+    line-height: 1;
 }
 
-.visually-hidden {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    overflow: hidden;
-    clip-path: inset(50%);
-    white-space: nowrap;
-}
-
+/* Focus et survol */
 .diary-header a:focus-visible,
 .diary-header button:focus-visible,
 .diary-header input:focus-visible,
 .diary-main a:focus-visible,
 .diary-main button:focus-visible {
-    outline: 2px solid #7a3e96;
-    outline-offset: 4px;
+    outline: 0.125rem solid #7a3e96;
+    outline-offset: 0.25rem;
 }
+
 .diary-all-entries:hover {
     text-decoration: underline;
 }
+
 .diary-header .btn:hover,
 .diary-main .btn:hover {
     filter: brightness(0.97);
 }
 
-@media (min-width: 1552px) {
+/* Adaptation : grands écrans */
+@media (min-width: 97rem) {
     .diary-header,
     .diary-main {
-        padding-left: max(56px, calc((100% - 1328px) / 2));
-        padding-right: max(56px, calc((100% - 1328px) / 2));
+        padding-left: max(3.5rem, calc((100% - 83rem) / 2));
+        padding-right: max(3.5rem, calc((100% - 83rem) / 2));
     }
 }
 
-@media (max-width: 1100px) {
+/* Adaptation : tablettes */
+@media (max-width: 68.75rem) {
     .diary-header {
-        gap: 28px;
-        padding-right: 32px;
-        padding-left: 32px;
+        gap: 1.75rem;
+        padding-right: 2rem;
+        padding-left: 2rem;
     }
     .diary-main {
-        padding-right: 32px;
-        padding-left: 32px;
-    }
-    .diary-search {
-        width: 200px;
+        padding-right: 2rem;
+        padding-left: 2rem;
     }
     .diary-entry-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 }
 
-@media (max-width: 850px) {
+/* Adaptation : en-tête compact */
+@media (max-width: 53.125rem) {
     .diary-header {
         flex-wrap: wrap;
-        gap: 20px;
+        gap: 1.25rem;
     }
     .diary-nav {
         margin-left: auto;
@@ -545,64 +425,57 @@ body {
         width: 100%;
         margin-left: 0;
     }
-    .diary-search {
-        flex: 1;
-        width: auto;
-    }
 }
 
-@media (max-width: 580px) {
+/* Adaptation : téléphones */
+@media (max-width: 36.25rem) {
     .diary-header {
-        padding: 20px;
-        gap: 20px 16px;
+        padding: 1.25rem;
+        gap: 1.25rem 1rem;
     }
     .diary-brand {
-        font-size: 18px;
+        font-size: 1.125rem;
     }
     .diary-nav {
-        gap: 16px;
+        gap: 1rem;
     }
-    .diary-nav a,
-    .diary-nav button {
-        font-size: 13px;
+    .diary-nav a {
+        font-size: 0.8125rem;
     }
     .diary-header-actions {
         flex-wrap: wrap;
-        gap: 12px;
-    }
-    .diary-search {
-        flex-basis: calc(100% - 52px);
+        gap: 0.75rem;
     }
     .diary-header-actions > .btn {
         order: 1;
         width: 100%;
     }
     .diary-main {
-        padding: 36px 20px 40px;
+        padding: 2.25rem 1.25rem 2.5rem;
     }
     .diary-greeting h1 {
-        font-size: 44px;
-        letter-spacing: -1.32px;
+        font-size: 2.75rem;
+        letter-spacing: -0.0825rem;
     }
     .diary-greeting-actions {
-        gap: 10px;
+        gap: 0.625rem;
     }
     .diary-greeting-actions .btn {
-        padding: 14px 20px;
-        font-size: 14px;
+        padding: 0.875rem 1.25rem;
+        font-size: 0.875rem;
     }
     .diary-recent {
-        margin-top: 40px;
+        margin-top: 2.5rem;
     }
     .diary-section-heading {
         flex-wrap: wrap;
-        gap: 12px;
+        gap: 0.75rem;
     }
     .diary-section-title {
-        gap: 10px;
+        gap: 0.625rem;
     }
     .diary-section-title h2 {
-        font-size: 26px;
+        font-size: 1.625rem;
     }
     .diary-entry-grid {
         grid-template-columns: minmax(0, 1fr);
