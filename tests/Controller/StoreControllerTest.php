@@ -3,6 +3,7 @@
 namespace App\Tests\Controller;
 
 use App\Entity\Store;
+use App\Entity\Currency;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Tools\SchemaTool;
@@ -32,8 +33,11 @@ final class StoreControllerTest extends WebTestCase
                 ->setName('Creator')
                 ->setCreatedAt($now)
                 ->setCguValidatedAt($now);
+            $currency = (new Currency())->setCode('EUR')->setName('Euro')->setSymbol('€')->setIsActive(true);
+            $entityManager->persist($currency);
             $entityManager->persist($user);
             $entityManager->flush();
+            $currencyId = $currency->getId();
             $client->loginUser($user);
             $crawler = $client->request('GET', '/store');
 
@@ -51,6 +55,7 @@ final class StoreControllerTest extends WebTestCase
                 'store[city]' => 'Paris',
                 'store[country]' => 'France',
                 'store[postal_code]' => '75001',
+                'store[currency]' => (string) $currencyId,
             ]));
 
             self::assertResponseRedirects('/my-locations');
@@ -58,6 +63,7 @@ final class StoreControllerTest extends WebTestCase
                 ->getRepository(Store::class)->findOneBy(['name' => 'Tea shop']);
             self::assertNotNull($saved);
             self::assertSame('Paris', $saved->getCity());
+            self::assertSame('EUR', $saved->getCurrency()->getCode());
             $client->followRedirect();
             self::assertResponseIsSuccessful();
             self::assertSelectorTextContains('main', 'Tea shop');

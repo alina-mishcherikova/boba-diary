@@ -102,11 +102,11 @@ final class OwnerFlowTest extends WebTestCase
         $currency = (new Currency())->setCode('EUR')->setName('Euro')->setSymbol('€')->setIsActive(true);
         $this->entityManager->persist($drink);
         $this->entityManager->persist($currency);
+        $ownStore->setCurrency($currency);
         $this->entityManager->flush();
         $ownId = $ownStore->getId();
         $otherId = $otherStore->getId();
         $drinkId = $drink->getId();
-        $currencyId = $currency->getId();
         $this->client->loginUser($owner);
 
         $this->client->request('GET', '/my-locations');
@@ -122,10 +122,10 @@ final class OwnerFlowTest extends WebTestCase
         $crawler = $this->client->request('GET', '/my-locations/'.$ownId.'/menu');
         self::assertResponseIsSuccessful();
         self::assertSelectorNotExists('[name="store_menu_item[store_id]"]');
+        self::assertSelectorNotExists('[name="store_menu_item[currency]"]');
         $crawler = $this->client->submit($crawler->selectButton('Add to menu')->form([
             'store_menu_item[bubbleTea]' => (string) $drinkId,
             'store_menu_item[price]' => '-1.00',
-            'store_menu_item[currency]' => (string) $currencyId,
         ]));
         self::assertSelectorTextContains('form', 'This value should be either positive or zero.');
         self::assertSame(0, static::getContainer()->get(EntityManagerInterface::class)->getRepository(StoreBubbleTea::class)->count([]));
@@ -133,7 +133,6 @@ final class OwnerFlowTest extends WebTestCase
         $this->client->submit($crawler->selectButton('Add to menu')->form([
             'store_menu_item[bubbleTea]' => (string) $drinkId,
             'store_menu_item[price]' => '6.50',
-            'store_menu_item[currency]' => (string) $currencyId,
             'store_menu_item[is_available]' => true,
         ]));
         self::assertResponseRedirects('/my-locations/'.$ownId.'/menu');
@@ -146,13 +145,13 @@ final class OwnerFlowTest extends WebTestCase
         $this->client->submit($crawler->selectButton('Add to menu')->form([
             'store_menu_item[bubbleTea]' => (string) $drinkId,
             'store_menu_item[price]' => '7.00',
-            'store_menu_item[currency]' => (string) $currencyId,
         ]));
         self::assertSelectorTextContains('form', 'This drink is already on this menu.');
         $manager = static::getContainer()->get(EntityManagerInterface::class);
         $item = $manager->getRepository(StoreBubbleTea::class)->findOneBy([]);
         self::assertSame(1, $manager->getRepository(StoreBubbleTea::class)->count([]));
         self::assertSame($ownId, $item->getStoreId()->getId());
+        self::assertSame('EUR', $item->getStoreId()->getCurrency()->getCode());
         self::assertSame('6.50', number_format((float) $item->getPrice(), 2, '.', ''));
         self::assertTrue($item->isAvailable());
         self::assertNotNull($item->getCreatedAt());
@@ -161,6 +160,46 @@ final class OwnerFlowTest extends WebTestCase
         self::assertResponseStatusCodeSame(403);
         $this->client->request('GET', '/my-locations/'.$otherId.'/menu');
         self::assertResponseStatusCodeSame(403);
+    }
+
+    public function testOwnerCanSetLocationCurrency(): void
+    {
+        $owner = $this->user('owner@example.com', ['ROLE_OWNER']);
+        $other = $this->user('other@example.com', ['ROLE_OWNER']);
+        $store = $this->store('Currency location', $owner);
+        $otherStore = $this->store('Other location', $other);
+        $currency = (new Currency())->setCode('EUR')->setName('Euro')->setSymbol('€')->setIsActive(true);
+        $this->entityManager->persist($currency);
+        $this->entityManager->flush();
+        $storeId = $store->getId();
+        $currencyId = $currency->getId();
+        $otherId = $otherStore->getId();
+        $this->client->loginUser($owner);
+
+        $this->client->request('GET', '/my-locations/'.$storeId.'/menu');
+        self::assertSelectorTextContains('main', 'Choose a currency for this location before adding drinks.');
+        self::assertSelectorNotExists('button[type="submit"]');
+        $this->client->request('POST', '/my-locations/'.$storeId.'/menu');
+        self::assertSame(0, static::getContainer()->get(EntityManagerInterface::class)->getRepository(StoreBubbleTea::class)->count([]));
+
+        $this->client->request('GET', '/my-locations/'.$otherId.'/edit');
+        self::assertResponseStatusCodeSame(403);
+        $this->client->request('POST', '/my-locations/'.$otherId.'/edit');
+        self::assertResponseStatusCodeSame(403);
+
+        $crawler = $this->client->request('GET', '/my-locations/'.$storeId.'/edit');
+        self::assertResponseIsSuccessful();
+        self::assertSelectorExists('select[name="store[currency]"]');
+        $this->client->submit($crawler->selectButton('Save')->form([
+            'store[currency]' => (string) $currencyId,
+        ]));
+        self::assertResponseRedirects('/my-locations/'.$storeId.'/menu');
+        $this->client->followRedirect();
+        self::assertSelectorTextContains('main', 'Currency: EUR');
+        self::assertSelectorExists('button[type="submit"]');
+        self::assertSelectorNotExists('[name="store_menu_item[currency]"]');
+        $saved = static::getContainer()->get(EntityManagerInterface::class)->find(Store::class, $storeId);
+        self::assertSame('EUR', $saved->getCurrency()->getCode());
     }
 
     public function testGuestMustLogIn(): void

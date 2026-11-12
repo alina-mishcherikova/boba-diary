@@ -3,7 +3,6 @@
 namespace App\Form;
 
 use App\Entity\BubbleTea;
-use App\Entity\Currency;
 use App\Entity\StoreBubbleTea;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -32,12 +31,6 @@ final class StoreMenuItemType extends AbstractType
                     new Assert\PositiveOrZero(),
                     new Assert\LessThanOrEqual('99999999.99'),
                 ],
-            ])
-            ->add('currency', EntityType::class, [
-                'class' => Currency::class,
-                'choice_label' => 'code',
-                'placeholder' => 'Choose a currency',
-                'constraints' => [new Assert\NotNull()],
             ])
             ->add('is_available', CheckboxType::class, [
                 'label' => 'Available',

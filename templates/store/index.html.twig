@@ -1,10 +1,10 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Create a bubble tea store{% endblock %}
+{% block title %}{{ page_title|default('Create a bubble tea store') }}{% endblock %}
 
 {% block body %}
     <section class="form store-form">
-        <h1>Create a bubble tea store</h1>
+        <h1>{{ page_title|default('Create a bubble tea store') }}</h1>
 
         {% for message in app.flashes('success') %}
             <p role="status">{{ message }}</p>
@@ -43,6 +43,7 @@
                     attr: {placeholder: 'Enter the postal code'},
                     row_attr: {class: 'form-input'}
                 }) }}
+                {{ form_row(form.currency, {row_attr: {class: 'form-input'}}) }}
             </div>
             <button type="submit" class="btn btn-primary btn-full">Save</button>
         {{ form_end(form) }}

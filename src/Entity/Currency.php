@@ -30,14 +30,14 @@ class Currency
     private ?bool $is_active = null;
 
     /**
-     * @var Collection<int, StoreBubbleTea>
+     * @var Collection<int, Store>
      */
-    #[ORM\OneToMany(targetEntity: StoreBubbleTea::class, mappedBy: 'currency')]
-    private Collection $storeBubbleTeas;
+    #[ORM\OneToMany(targetEntity: Store::class, mappedBy: 'currency')]
+    private Collection $stores;
 
     public function __construct()
     {
-        $this->storeBubbleTeas = new ArrayCollection();
+        $this->stores = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -94,29 +94,29 @@ class Currency
     }
 
     /**
-     * @return Collection<int, StoreBubbleTea>
+     * @return Collection<int, Store>
      */
-    public function getStoreBubbleTeas(): Collection
+    public function getStores(): Collection
     {
-        return $this->storeBubbleTeas;
+        return $this->stores;
     }
 
-    public function addStoreBubbleTea(StoreBubbleTea $storeBubbleTea): static
+    public function addStore(Store $store): static
     {
-        if (!$this->storeBubbleTeas->contains($storeBubbleTea)) {
-            $this->storeBubbleTeas->add($storeBubbleTea);
-            $storeBubbleTea->setCurrency($this);
+        if (!$this->stores->contains($store)) {
+            $this->stores->add($store);
+            $store->setCurrency($this);
         }
 
         return $this;
     }
 
-    public function removeStoreBubbleTea(StoreBubbleTea $storeBubbleTea): static
+    public function removeStore(Store $store): static
     {
-        if ($this->storeBubbleTeas->removeElement($storeBubbleTea)) {
+        if ($this->stores->removeElement($store)) {
             // set the owning side to null (unless already changed)
-            if ($storeBubbleTea->getCurrency() === $this) {
-                $storeBubbleTea->setCurrency(null);
+            if ($store->getCurrency() === $this) {
+                $store->setCurrency(null);
             }
         }
 

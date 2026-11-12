@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Store;
+use App\Entity\Currency;
 use App\Entity\User;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
@@ -66,6 +67,12 @@ class StoreCrudController extends AbstractCrudController
                 new Assert\Length(max:20),
             ]);
         
+        yield AssociationField::new('currency')
+            ->setFormTypeOption('choice_label', 'code')
+            ->setFormTypeOption('constraints', [new Assert\NotNull()])
+            ->setRequired(true)
+            ->formatValue(static fn (?Currency $currency): string => $currency?->getCode() ?? 'Not set');
+
         yield DateTimeField::new('createdAt')->hideOnForm();
         yield AssociationField::new('created_by', 'Created by')
             ->formatValue(static fn (?User $user): string => $user?->getUserIdentifier() ?? '')

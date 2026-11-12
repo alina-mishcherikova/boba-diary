@@ -46,9 +46,6 @@ class StoreBubbleTea
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
     private ?string $price = null;
 
-    #[ORM\ManyToOne(inversedBy: 'storeBubbleTeas')]
-    private ?Currency $currency = null;
-
     #[ORM\Column]
     private ?bool $is_available = null;
 
@@ -93,18 +90,6 @@ class StoreBubbleTea
     public function setPrice(string $price): static
     {
         $this->price = $price;
-
-        return $this;
-    }
-
-    public function getCurrency(): ?Currency
-    {
-        return $this->currency;
-    }
-
-    public function setCurrency(?Currency $currency): static
-    {
-        $this->currency = $currency;
 
         return $this;
     }

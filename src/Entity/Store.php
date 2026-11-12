@@ -65,6 +65,9 @@ class Store
     #[ORM\JoinColumn(nullable: false)]
     private ?User $created_by = null;
 
+    #[ORM\ManyToOne(inversedBy: 'stores')]
+    private ?Currency $currency = null;
+
     /**
      * @var Collection<int, StoreBubbleTea>
      */
@@ -187,6 +190,18 @@ class Store
     public function setCreatedBy(?User $created_by): static
     {
         $this->created_by = $created_by;
+
+        return $this;
+    }
+
+    public function getCurrency(): ?Currency
+    {
+        return $this->currency;
+    }
+
+    public function setCurrency(?Currency $currency): static
+    {
+        $this->currency = $currency;
 
         return $this;
     }
