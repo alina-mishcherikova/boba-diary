@@ -81,12 +81,6 @@ form,
     margin-inline: auto;
 }
 
-form,
-.regestration-form,
-.login-form {
-    align-items: center;
-}
-
 form > * {
     box-sizing: border-box;
     max-width: 100%;
@@ -139,6 +133,7 @@ form > * {
     display: flex;
     flex-direction: column;
     gap: 1.25rem;
+    padding-bottom: 2rem;
 }
 
 .form-input {
