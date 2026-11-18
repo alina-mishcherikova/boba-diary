@@ -163,6 +163,47 @@ final class OwnerFlowTest extends WebTestCase
         self::assertResponseStatusCodeSame(403);
     }
 
+    public function testStoreApiSerializesStoresWhoseOwnerHasCreatedDrinks(): void
+    {
+        $owner = $this->user('api-owner@example.com', ['ROLE_OWNER']);
+        $store = $this->store('Tea shop', $owner);
+        $now = new \DateTimeImmutable();
+        $drink = (new BubbleTea())->setName('Matcha')->setCreatedBy($owner)->setCreatedAt($now);
+        $currency = (new Currency())->setCode('EUR')->setName('Euro')->setSymbol('€')->setIsActive(true);
+        $item = (new StoreBubbleTea())->setStoreId($store)->setBubbleTea($drink)
+            ->setPrice('6.50')->setIsAvailable(true)->setCreatedAt($now);
+        $store->setCurrency($currency);
+        $this->entityManager->persist($drink);
+        $this->entityManager->persist($currency);
+        $this->entityManager->persist($item);
+        $this->entityManager->flush();
+
+        $storeUrl = '/api/stores/'.$store->getId();
+        $currencyUrl = '/api/currencies/'.$currency->getId();
+        $menuItemUrl = '/api/store_bubble_teas/'.$item->getId();
+        $this->entityManager->clear();
+
+        $headers = ['HTTP_ACCEPT' => 'application/ld+json'];
+
+        $this->client->request('GET', '/api/stores', server: $headers);
+        self::assertResponseStatusCodeSame(200);
+        $collection = json_decode($this->client->getResponse()->getContent(), true, flags: JSON_THROW_ON_ERROR);
+        self::assertCount(1, $collection['member']);
+        self::assertSame($storeUrl, $collection['member'][0]['@id']);
+
+        $this->client->request('GET', $storeUrl, server: $headers);
+        self::assertResponseStatusCodeSame(200);
+        $details = json_decode($this->client->getResponse()->getContent(), true, flags: JSON_THROW_ON_ERROR);
+
+        foreach ([$collection['member'][0], $details] as $data) {
+            self::assertSame('Tea shop', $data['name']);
+            self::assertSame($currencyUrl, $data['currency']);
+            self::assertSame([$menuItemUrl], $data['storeBubbleTeas']);
+            self::assertArrayNotHasKey('createdBy', $data);
+            self::assertArrayNotHasKey('created_by', $data);
+        }
+    }
+
     public function testOwnerCanSetLocationCurrency(): void
     {
         $owner = $this->user('owner@example.com', ['ROLE_OWNER']);

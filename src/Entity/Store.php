@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
@@ -63,6 +64,7 @@ class Store
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
+    #[ApiProperty(readable: false)]
     private ?User $created_by = null;
 
     #[ORM\ManyToOne(inversedBy: 'stores')]
@@ -182,6 +184,8 @@ class Store
     }
 
 
+    // API Platform discovers this getter separately as "createdBy".
+    #[ApiProperty(readable: false)]
     public function getCreatedBy(): ?User
     {
         return $this->created_by;
