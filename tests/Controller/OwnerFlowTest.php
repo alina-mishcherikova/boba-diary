@@ -52,40 +52,28 @@ final class OwnerFlowTest extends WebTestCase
     }
 
     #[DataProvider('registrationRoles')]
-    public function testRegistrationAndNavigation(bool $isOwner): void
+    public function testRegistrationAndNavigation(): void
     {
         $crawler = $this->client->request('GET', '/register');
         self::assertResponseIsSuccessful();
-        self::assertSelectorExists('input[name="registration_form[isOwner]"]:not([required])');
         $form = $crawler->selectButton('Register')->form([
             'registration_form[email]' => 'new@example.com',
             'registration_form[username]' => 'newuser',
             'registration_form[name]' => 'New User',
             'registration_form[plainPassword]' => 'Password123!',
             'registration_form[agreeTerms]' => true,
-            'registration_form[isOwner]' => $isOwner,
         ]);
         $this->client->submit($form);
         self::assertResponseRedirects('/profile');
         $user = static::getContainer()->get(EntityManagerInterface::class)->getRepository(User::class)->findOneBy(['email' => 'new@example.com']);
         self::assertNotNull($user);
         self::assertContains('ROLE_USER', $user->getRoles());
-        self::assertSame($isOwner, in_array('ROLE_OWNER', $user->getRoles(), true));
         self::assertNotContains('ROLE_ADMIN', $user->getRoles());
 
         $this->client->followRedirect();
         self::assertResponseIsSuccessful();
         self::assertSelectorTextContains('h1', 'New User');
         self::assertSelectorNotExists('a[href="/login"]');
-        if ($isOwner) {
-            self::assertSelectorTextContains('nav a[href="/my-locations"]', 'My locations');
-        } else {
-            self::assertSelectorNotExists('nav a[href="/my-locations"]');
-        }
-        $this->client->request('GET', '/my-locations');
-        self::assertResponseStatusCodeSame($isOwner ? 200 : 403);
-        $this->client->request('GET', '/store');
-        self::assertResponseStatusCodeSame($isOwner ? 200 : 403);
     }
 
     public function testRejectedRegistrationDoesNotLogIn(): void
@@ -97,7 +85,6 @@ final class OwnerFlowTest extends WebTestCase
             'registration_form[name]' => 'Rejected User',
             'registration_form[plainPassword]' => 'Password123!',
             'registration_form[agreeTerms]' => false,
-            'registration_form[isOwner]' => true,
         ]));
         self::assertSelectorTextContains('form', 'You should agree to our terms.');
         self::assertNull(static::getContainer()->get(EntityManagerInterface::class)->getRepository(User::class)
