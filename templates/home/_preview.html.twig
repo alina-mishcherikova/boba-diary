@@ -1,0 +1,19 @@
+{% macro rating(value) %}
+    <p class="home-rating home-rating-text" role="img" aria-label="{{ value }} out of 5 pearls">
+        <span class="home-rating-pearls" aria-hidden="true">
+            {% for pearl in 1..5 %}
+                {% set fill = value >= pearl ? 'full' : (value > pearl - 1 ? 'half' : 'empty') %}
+                <img src="{{ asset('images/home/rating-' ~ fill ~ '.svg') }}" width="10" height="10" alt="">
+            {% endfor %}
+        </span>
+        <span>{{ value|number_format(1) }}</span>
+    </p>
+{% endmacro %}
+
+{% macro chips() %}
+    <ul class="home-chips" role="list" aria-label="Drink customizations">
+        <li class="home-chip home-chip-accent">50% sugar</li>
+        <li class="home-chip">Less ice</li>
+        <li class="home-chip home-chip-topping">Tapioca</li>
+    </ul>
+{% endmacro %}

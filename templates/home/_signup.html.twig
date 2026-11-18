@@ -1,0 +1,16 @@
+{{ form_start(form, {
+    action: path('app_home_register', {_fragment: 'signup'}),
+    attr: {class: 'home-signup-form', 'aria-labelledby': 'home-form-title'}
+}) }}
+    <h3 class="home-label home-label-large" id="home-form-title">Create your diary</h3>
+    {{ form_errors(form) }}
+    <div class="home-form-names">
+        {{ form_row(form.name, {label: 'Name', attr: {placeholder: 'Mira Halloway', autocomplete: 'name'}}) }}
+        {{ form_row(form.username, {label: 'Username', attr: {placeholder: 'mirah', autocomplete: 'username'}}) }}
+    </div>
+    {{ form_row(form.email, {label: 'Email', type: 'email', attr: {placeholder: 'you@example.com', autocomplete: 'email'}}) }}
+    {{ form_row(form.plainPassword, {label: 'Password', attr: {placeholder: 'At least 6 characters', minlength: 6}}) }}
+    {{ form_row(form.agreeTerms, {label: 'I agree to the terms.', row_attr: {class: 'home-form-terms'}}) }}
+    <button class="btn btn-primary btn-full" type="submit">Create account</button>
+    <p>Already keeping one? <a class="home-text-link" href="{{ path('app_login') }}">Log in</a></p>
+{{ form_end(form) }}

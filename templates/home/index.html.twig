@@ -1,11 +1,179 @@
 {% extends 'base.html.twig' %}
+{% import 'home/_preview.html.twig' as preview %}
 
-{% block title %}Hello HomeController!{% endblock %}
+{% block title %}Boba Diary · Your bubble tea journal{% endblock %}
+
+{% block header %}
+    {% if app.user %}
+        {{ parent() }}
+    {% else %}
+        <header class="home-header">
+            <div class="home-shell home-header-inner">
+                {{ include('home/_brand.html.twig') }}
+                <nav class="home-nav" aria-label="Main navigation">
+                    <a href="#how-it-works">How it works</a>
+                    <a href="#inside-the-app">Inside the app</a>
+                    <a href="#questions">Questions</a>
+                </nav>
+                <div class="home-header-actions">
+                    <a class="home-text-link" href="{{ path('app_login') }}">Log in</a>
+                    <a class="btn btn-primary" href="#signup">Start your diary</a>
+                </div>
+            </div>
+        </header>
+    {% endif %}
+{% endblock %}
 
 {% block body %}
-<style>
- 
-</style>
-{{ parent() }}
-<p>Welcome to your new boba diary!</p>
+    {% set steps = [
+        {tone: 'lilac', title: 'Pick the shop and the drink', text: 'Your regulars sit at the top. Somewhere new? Add it in one line and keep going.'},
+        {tone: 'peach', title: 'Say how you had it', text: 'Sugar, ice, temperature, toppings — tap, don’t type. Saved per visit, not per drink.'},
+        {tone: 'plain', title: 'Rate it and move on', text: 'Five pearls, halves allowed. Photo and notes optional — nothing blocks saving.'}
+    ] %}
+    {% set features = {
+        '15 sec': 'to add a drink you’ve had before, from the home screen.',
+        'No feed': 'Nobody sees your entries. No followers, no likes.',
+        'Monthly': 'Your history groups itself into months, like a real diary.',
+        'Phone-first': 'Built to be used standing in the shop, one-handed.'
+    } %}
+    {% set drinks = [
+        {image: 'taro-milk-tea.png', name: 'Taro Milk Tea', shop: 'Bubble House · Brooklyn', rating: 4.5, date: '16 Sep', note: 'Nutty, not too sweet — the pearls were perfectly chewy.'},
+        {image: 'brown-sugar-boba.png', name: 'Brown Sugar Boba', shop: 'Momo Tea · Berlin', rating: 5, date: '11 Sep', note: 'Tiger stripes all the way down. Warm pearls, cold milk — perfect.'},
+        {image: 'matcha-pearl-latte.png', name: 'Matcha Pearl Latte', shop: 'Tea Lab · Lisbon', rating: 4, date: '08 Sep', note: 'Grassy and clean. Could take a little more matcha next time.'},
+        {image: 'strawberry-oolong.png', name: 'Strawberry Oolong', shop: 'Cha Cha Cha · Paris', rating: 4.5, date: '28 Aug', note: 'Bright and juicy. The oolong comes through at the end.'}
+    ] %}
+
+    <main class="home-main home-shell">
+        <section class="home-hero" aria-labelledby="home-title">
+            <div class="home-hero-copy">
+                <p class="home-label home-badge">A private diary, not a feed</p>
+                <h1 id="home-title">Every bubble tea you’ve ever loved, <span>in one place.</span></h1>
+                <p class="home-intro">Log the drink, the shop, the sugar level and the pearls in about fifteen seconds. Rate it. Add a photo if you took one. Then browse your own history whenever you can’t remember which taro was the good one.</p>
+                <div class="home-hero-actions">
+                    {% if app.user %}
+                        <a class="btn btn-primary" href="{{ path('app_profile') }}">Open your diary</a>
+                    {% else %}
+                        <a class="btn btn-primary" href="#signup">Create your free account</a>
+                    {% endif %}
+                    <a class="btn btn-secondary" href="#inside-the-app">See a sample diary</a>
+                </div>
+                <p class="home-label home-muted">Free forever · no ads · your notes stay yours</p>
+            </div>
+            <div class="home-hero-visual">
+                <img class="home-hero-photo" src="{{ asset('images/home/bubble-teas.png') }}" width="560" height="500" alt="Five colorful cups of bubble tea beside a notebook" fetchpriority="high">
+                <div class="home-floating-entry">
+                    <p class="home-label">Entry 48 · 16 Sep</p>
+                    <p class="home-drink-title">Taro Milk Tea</p>
+                    {{ preview.rating(4.5) }}
+                    {{ preview.chips() }}
+                </div>
+                <div class="home-tally">
+                    <p class="home-label">Your tally</p>
+                    <p class="home-tally-count"><strong>47</strong> drinks · 12 stores</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="how-it-works" aria-labelledby="home-steps-title">
+            <div class="home-section-heading">
+                <h2 id="home-steps-title">Three taps, one entry</h2>
+                <p class="home-label home-label-large home-muted">How it works</p>
+            </div>
+            <ol class="home-steps" role="list">
+                {% for step in steps %}
+                    <li class="home-step home-step-{{ step.tone }}">
+                        <div class="home-step-number" aria-hidden="true">
+                            <span class="home-label">Step 0{{ loop.index }}</span>
+                            <span>0{{ loop.index }}</span>
+                        </div>
+                        <h3>{{ step.title }}</h3>
+                        <p>{{ step.text }}</p>
+                    </li>
+                {% endfor %}
+            </ol>
+        </section>
+
+        <section class="home-questions" id="questions" aria-labelledby="home-questions-title">
+            <div class="home-counter">
+                <p class="home-label home-label-large home-muted">Why people keep it</p>
+                <h2 id="home-questions-title">It answers the only question that matters at the counter.</h2>
+                <dl>
+                    <div>
+                        <dt>Which taro was the good one?</dt>
+                        <dd class="home-label home-label-large home-muted">4.5 · Bubble House</dd>
+                    </div>
+                    <div>
+                        <dt>How much sugar did I order last time?</dt>
+                        <dd class="home-label home-label-large home-muted">50%</dd>
+                    </div>
+                    <div>
+                        <dt>Have I already tried the wintermelon?</dt>
+                        <dd class="home-label home-label-large home-muted">Yes · 14 Sep</dd>
+                    </div>
+                </dl>
+            </div>
+            <div class="home-features">
+                {% for title, text in features %}
+                    <div class="home-feature">
+                        <h3>{{ title }}</h3>
+                        <p>{{ text }}</p>
+                    </div>
+                {% endfor %}
+            </div>
+        </section>
+
+        <section id="inside-the-app" aria-labelledby="home-preview-title">
+            <div class="home-section-heading">
+                <h2 id="home-preview-title">Your diary, not a feed.</h2>
+                <p class="home-label home-label-large home-muted">Inside the app</p>
+            </div>
+            <div class="home-drinks">
+                {% for drink in drinks %}
+                    <article class="home-drink">
+                        <img class="home-drink-photo" src="{{ asset('images/home/' ~ drink.image) }}" width="320" height="200" alt="" loading="lazy">
+                        <div class="home-drink-body">
+                            <h3 class="home-drink-title">{{ drink.name }}</h3>
+                            <p class="home-label">{{ drink.shop }}</p>
+                            <div class="home-drink-details">
+                                {{ preview.rating(drink.rating) }}
+                                <span class="home-rating-text home-muted">{{ drink.date }}</span>
+                            </div>
+                            <p>“{{ drink.note }}”</p>
+                            {{ preview.chips() }}
+                        </div>
+                    </article>
+                {% endfor %}
+            </div>
+        </section>
+
+        <section class="home-signup" id="signup" aria-labelledby="home-signup-title">
+            <div class="home-signup-copy">
+                <h2 id="home-signup-title">Start with today’s drink.</h2>
+                {% if app.user %}
+                    <p class="home-intro">Your next entry can be the cup that’s already on your desk.</p>
+                    <a class="btn btn-primary" href="{{ path('app_profile') }}">Open your diary</a>
+                {% else %}
+                    <p class="home-intro">Four fields and you’re in. Your first entry can be the cup that’s already on your desk.</p>
+                {% endif %}
+                <p class="home-label">Taro · Jasmine · Thai · Passionfruit</p>
+            </div>
+            {% if not app.user %}
+                {{ include('home/_signup.html.twig', {form: registrationForm}, with_context = false) }}
+            {% endif %}
+        </section>
+    </main>
+
+    <footer class="home-footer">
+        <div class="home-shell home-footer-inner">
+            <div class="home-footer-brand">
+                {{ include('home/_brand.html.twig') }}
+                <p class="home-label home-muted">A personal drinking record · 2026</p>
+            </div>
+            <ul class="home-footer-topics" role="list">
+                <li>Privacy</li>
+                <li>Export your data</li>
+                <li>Contact</li>
+            </ul>
+        </div>
+    </footer>
 {% endblock %}
