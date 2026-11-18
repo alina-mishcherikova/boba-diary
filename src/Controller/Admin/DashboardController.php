@@ -37,6 +37,7 @@ class DashboardController extends AbstractDashboardController
             'Stores',
             'fa fa-store'
         );
+        yield MenuItem::linkTo(CurrencyCrudController::class, 'Currencies', 'fa fa-coins');
         yield MenuItem::section('Bubble Tea');
          yield MenuItem::linkTo(
             BubbleTeaCrudController::class,

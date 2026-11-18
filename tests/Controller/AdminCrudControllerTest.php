@@ -2,6 +2,7 @@
 
 namespace App\Tests\Controller;
 
+use App\Entity\Currency;
 use App\Entity\Store;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
@@ -10,7 +11,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 final class AdminCrudControllerTest extends WebTestCase
 {
-    public function testStoreCreatorAndCreationForms(): void
+    public function testStoreCreatorAndAdminCreationForms(): void
     {
         $databasePath = tempnam(sys_get_temp_dir(), 'store-test-');
         $previousEnv = $_ENV['DATABASE_URL'] ?? null;
@@ -58,6 +59,31 @@ final class AdminCrudControllerTest extends WebTestCase
             $client->request('GET', '/admin/bubble-tea/new');
             self::assertResponseIsSuccessful();
             self::assertSelectorExists('form input[name="BubbleTea[name]"]');
+
+            $client->clickLink('Currencies');
+            self::assertResponseIsSuccessful();
+            $crawler = $client->request('GET', '/admin/currency/new');
+            self::assertResponseIsSuccessful();
+            self::assertSelectorExists('input[name="Currency[is_active]"]:checked');
+
+            $client->submit($crawler->filter('button[data-action-name="saveAndReturn"]')->form([
+                'Currency[code]' => 'usd',
+                'Currency[name]' => 'US Dollar',
+                'Currency[symbol]' => '$',
+            ]));
+            self::assertSelectorTextContains('form[name="Currency"]', 'Enter a three-letter uppercase currency code.');
+
+            $client->submit($client->getCrawler()->filter('button[data-action-name="saveAndReturn"]')->form([
+                'Currency[code]' => 'USD',
+                'Currency[is_active]' => false,
+            ]));
+            self::assertResponseRedirects('http://localhost/admin/currency');
+            $currency = static::getContainer()->get(EntityManagerInterface::class)
+                ->getRepository(Currency::class)->findOneBy(['code' => 'USD']);
+            self::assertNotNull($currency);
+            self::assertSame('US Dollar', $currency->getName());
+            self::assertSame('$', $currency->getSymbol());
+            self::assertFalse($currency->isActive());
         } finally {
             static::ensureKernelShutdown();
             if (null === $previousEnv) {
