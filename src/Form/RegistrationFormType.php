@@ -39,11 +39,6 @@ class RegistrationFormType extends AbstractType
                     ),
                 ],
             ])
-            ->add('isOwner', CheckboxType::class, [
-                'mapped' => false,
-                'required' => false,
-                'label' => 'I am a location owner',
-            ])
             ->add('agreeTerms', CheckboxType::class, [
                 'mapped' => false,
                 'constraints' => [
