@@ -5,6 +5,9 @@ namespace App\Entity;
 use App\Repository\DrinkLogRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use App\Enum\Temperature;
+use App\Enum\IceLevel;
+use App\Enum\SugarLevel;
 
 #[ORM\Entity(repositoryClass: DrinkLogRepository::class)]
 class DrinkLog
@@ -42,13 +45,13 @@ class DrinkLog
     #[ORM\Column(nullable: true)]
     private ?int $paid_currency_id = null;
 
-    #[ORM\Column(nullable: true)]
+    #[ORM\Column(type: Types::INTEGER, nullable: true, enumType: Temperature::class)]
     private ?int $temperature = null;
 
-    #[ORM\Column(nullable: true)]
+    #[ORM\Column(type: Types::INTEGER, nullable: true, enumType: SugarLevel::class)]
     private ?int $sugar_level = null;
 
-    #[ORM\Column(nullable: true)]
+    #[ORM\Column(type: Types::INTEGER, nullable: true, enumType: IceLevel::class)]
     private ?int $ice_level = null;
 
     public function getId(): ?int
@@ -165,36 +168,36 @@ class DrinkLog
         return $this;
     }
 
-    public function getTemperature(): ?int
+    public function getTemperature(): ?Temperature
     {
         return $this->temperature;
     }
 
-    public function setTemperature(?int $temperature): static
+    public function setTemperature(?Temperature $temperature): static
     {
         $this->temperature = $temperature;
 
         return $this;
     }
 
-    public function getSugarLevel(): ?int
+    public function getSugarLevel(): ?SugarLevel
     {
         return $this->sugar_level;
     }
 
-    public function setSugarLevel(?int $sugar_level): static
+    public function setSugarLevel(?SugarLevel $sugar_level): static
     {
         $this->sugar_level = $sugar_level;
 
         return $this;
     }
 
-    public function getIceLevel(): ?int
+    public function getIceLevel(): ?IceLevel
     {
         return $this->ice_level;
     }
 
-    public function setIceLevel(?int $ice_level): static
+    public function setIceLevel(?IceLevel $ice_level): static
     {
         $this->ice_level = $ice_level;
 
