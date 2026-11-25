@@ -514,6 +514,87 @@ form > * {
     }
 }
 
+.explore {
+    width: min(100% - 3rem, 82rem);
+    margin: 3rem auto 5rem;
+}
+
+.explore h1 {
+    font-size: clamp(2rem, 5vw, 3.25rem);
+}
+
+.explore-tabs {
+    display: flex;
+    gap: 2rem;
+    border-bottom: 1px solid #e8e3da;
+    margin-bottom: 2rem;
+}
+
+.explore-tabs a {
+    padding-block: 0.6rem;
+    color: inherit;
+    text-decoration: none;
+}
+
+.explore-tabs [aria-current] {
+    border-bottom: 2px solid #793893;
+}
+
+.explore-tabs small {
+    color: #793893;
+}
+
+.explore-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+    gap: 1rem;
+}
+
+.explore-card,
+.explore-menu {
+    border: 1px solid #e8e3da;
+    border-radius: 1rem;
+    background: #fff;
+    overflow: hidden;
+}
+
+.explore-card {
+    color: inherit;
+    text-decoration: none;
+}
+
+.explore-card > div,
+.explore-suggest {
+    padding: 1rem;
+}
+
+.explore-card h2 {
+    font-size: 1rem;
+    margin: 0 0 0.4rem;
+}
+
+.explore-card p,
+.explore-menu p {
+    margin: 0;
+}
+
+.drink-details {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 0.75rem;
+}
+
+.profile-price {
+    color: var(--text-danger, #721c24);
+    font-family: "DM Mono", monospace;
+    font-size: 13px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1.125rem; /* 138.462% */
+}
+
 .app-photo {
     position: relative;
     display: block;
@@ -533,4 +614,69 @@ form > * {
     place-items: center;
     background: hsla(43, 21%, 94%, 1);
     color: #76717d;
+}
+
+.explore-card-photo,
+.explore-cover {
+    width: 100%;
+}
+
+.explore-card-photo {
+    aspect-ratio: 16 / 9;
+}
+
+.explore-cover {
+    margin-block: 2rem;
+    height: clamp(8rem, 16vw, 14rem);
+    border-radius: 1rem;
+}
+
+.explore-suggest {
+    display: grid;
+    align-content: center;
+    justify-items: center;
+    min-height: 10rem;
+    gap: 0.5rem;
+    border-style: dashed;
+    background: transparent;
+}
+
+.explore-store-heading {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    margin-block: 2rem;
+    gap: 1rem;
+}
+
+.explore-store-heading h1 {
+    margin: 0;
+}
+
+.explore-menu {
+    padding: 0.5rem 1rem;
+}
+
+.explore-menu li {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem;
+    padding-block: 0.75rem;
+}
+
+.explore-menu li + li {
+    border-top: 1px solid #e8e3da;
+}
+
+.explore-menu li > div {
+    flex: 1;
+}
+
+.explore-menu-photo {
+    flex: none;
+    width: 3rem;
+    height: 3rem;
+    border-radius: 0.5rem;
 }

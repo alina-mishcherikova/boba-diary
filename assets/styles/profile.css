@@ -152,7 +152,7 @@
 }
 
 .profile-label {
-    color: var(--profile-secondary);
+    color: var(--profile-secondary, #6b6875);
     font: 500 0.625rem/0.8125rem "DM Mono", monospace;
     letter-spacing: 0.08em;
     text-transform: uppercase;

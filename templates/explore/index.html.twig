@@ -1,0 +1,60 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Explore · boba diary{% endblock %}
+
+{% block body %}
+    <main class="explore">
+        <h1>Find the next one</h1>
+        <nav class="explore-tabs" aria-label="Explore catalog">
+            <a href="{{ path('app_explore') }}"{% if tab == 'stores' %} aria-current="page"{% endif %}>Stores <small>{{ storeCount }}</small></a>
+            <a href="{{ path('app_explore', {tab: 'drinks'}) }}"{% if tab == 'drinks' %} aria-current="page"{% endif %}>Drinks <small>{{ drinkCount }}</small></a>
+        </nav>
+        <div class="explore-grid">
+            {% for store in stores %}
+                {% set menu = store.storeBubbleTeas|filter(item => item.available and item.bubbleTea and not item.bubbleTea.inactivatedAt) %}
+                <a class="explore-card" href="{{ path('app_explore_store', {id: store.id}) }}">
+                    {% include '_photo.html.twig' with {url: store.imageUrl, class: 'explore-card-photo'} only %}
+                    <div>
+                        <h2>{{ store.name }}</h2>
+                        <p>{{ store.address }}, {{ store.city }}, {{ store.country }}</p>
+                        <p class="profile-label">{{ menu|length }} drinks</p>
+                    </div>
+                </a>
+            {% endfor %}
+            {% for drink in drinks %}
+                {% set locations = drink.storeBubbleTeas|filter(item => item.available and item.storeId and not item.storeId.inactivatedAt) %}
+                <article class="explore-card">
+                    {% include '_photo.html.twig' with {url: drink.imageUrl, class: 'explore-card-photo'} only %}
+                    <div>
+                        <h2>{{ drink.name }}</h2>
+                        {% if drink.description %}<p>{{ drink.description }}</p>{% endif %}
+                        <div class="drink-details">
+                            <p class="profile-label">At {{ locations|length }} stores</p>
+                            {% set priced = locations|filter(item => item.storeId.currency and item.price is not null) %}
+                            {% if priced is not empty %}
+                                {% set currencies = priced|map(item => item.storeId.currency.code) %}
+                                {% if currencies|filter(code => code == currencies|first)|length == priced|length %}
+                                    <p class="profile-price">From {{ min(priced|map(item => item.price))|number_format(2) }} {{ currencies|first }}</p>
+                                {% endif %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </article>
+            {% endfor %}
+            <aside class="explore-card explore-suggest">
+                {% if tab == 'stores' %}
+                    <h2>Can’t find your spot?</h2>
+                    {% if is_granted('ROLE_OWNER') %}
+                        <a class="btn btn-secondary" href="{{ path('app_store') }}">+ Suggest a store</a>
+                    {% else %}
+                        {% include '_disabled_button.html.twig' with {label: 'Suggest a store', icon: 'tabler:plus', variant: 'secondary'} only %}
+                    {% endif %}
+                {% else %}
+                    <h2>Missing a drink?</h2>
+                    <a class="btn btn-secondary" href="{{ path('app_bubble_tea') }}">+ Suggest a drink</a>
+                {% endif %}
+            </aside>
+        </div>
+    </main>
+    {% include '_diary_footer.html.twig' %}
+{% endblock %}

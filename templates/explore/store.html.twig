@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ store.name }} · boba diary{% endblock %}
+
+{% block body %}
+    <main class="explore">
+        <a href="{{ path('app_explore') }}">← Back to explore</a>
+        {% include '_photo.html.twig' with {url: store.imageUrl, class: 'explore-cover'} only %}
+        <header class="explore-store-heading">
+            <div>
+                <p class="profile-label">{{ store.address }}, {{ store.city }}, {{ store.country }}</p>
+                <h1>{{ store.name }}</h1>
+            </div>
+            <a class="btn btn-secondary" href="{{ path('app_bubble_tea') }}">Suggest a drink</a>
+        </header>
+        {% set menu = store.storeBubbleTeas|filter(item => item.bubbleTea and not item.bubbleTea.inactivatedAt) %}
+        <h2>Menu <small class="profile-label">{{ menu|length }} drinks</small></h2>
+        <ul class="explore-menu">
+            {% for item in menu %}
+                <li>
+                    {% include '_photo.html.twig' with {url: item.bubbleTea.imageUrl, class: 'explore-menu-photo'} only %}
+                    <div>
+                        <strong>{{ item.bubbleTea.name }}</strong>
+                        {% if item.bubbleTea.description %}<p>{{ item.bubbleTea.description }}</p>{% endif %}
+                    </div>
+                    {% if not item.available %}<span>Sold out</span>{% endif %}
+                    {% if ratings[item.bubbleTea.id] is defined %}
+                        {% include '_pearl_rating.html.twig' with {rating: ratings[item.bubbleTea.id]} only %}
+                    {% endif %}
+                    {% if item.price is not null and store.currency %}<span>{{ item.price|number_format(2) }} {{ store.currency.code }}</span>{% endif %}
+                </li>
+            {% else %}
+                <li>No drinks on this menu yet.</li>
+            {% endfor %}
+        </ul>
+    </main>
+    {% include '_diary_footer.html.twig' %}
+{% endblock %}

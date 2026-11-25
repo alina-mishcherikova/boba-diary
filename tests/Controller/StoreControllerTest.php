@@ -2,8 +2,10 @@
 
 namespace App\Tests\Controller;
 
-use App\Entity\Store;
+use App\Entity\BubbleTea;
 use App\Entity\Currency;
+use App\Entity\Store;
+use App\Entity\StoreBubbleTea;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Tools\SchemaTool;
@@ -67,6 +69,37 @@ final class StoreControllerTest extends WebTestCase
             $client->followRedirect();
             self::assertResponseIsSuccessful();
             self::assertSelectorTextContains('main', 'Tea shop');
+
+            $catalog = $client->request('GET', '/explore');
+            self::assertResponseIsSuccessful();
+            self::assertSelectorTextContains('.explore-card', '10 Rue de Paris, Paris, France');
+            $client->click($catalog->selectLink('Tea shop')->link());
+            self::assertResponseIsSuccessful();
+            self::assertSelectorTextContains('h1', 'Tea shop');
+            self::assertSelectorTextContains('.explore-menu', 'No drinks on this menu yet.');
+
+            $entityManager = static::getContainer()->get(EntityManagerInterface::class);
+            $drink = (new BubbleTea())->setName('Jasmine tea')->setDescription('Jasmine and pearls')
+                ->setCreatedAt($now)->setCreatedBy($entityManager->getReference(User::class, $user->getId()));
+            $item = (new StoreBubbleTea())->setBubbleTea($drink)->setPrice('5.50')
+                ->setCreatedAt($now)->setIsAvailable(true)
+                ->setStoreId($entityManager->getReference(Store::class, $saved->getId()));
+            $entityManager->persist($drink);
+            $entityManager->persist($item);
+            $entityManager->flush();
+
+            $client->request('GET', '/explore/drinks');
+            self::assertResponseIsSuccessful();
+            self::assertSelectorTextContains('[aria-label="Explore catalog"] [aria-current]', 'Drinks');
+            self::assertSelectorTextContains('.explore-card', 'Jasmine tea');
+            self::assertSelectorTextContains('.explore-card', 'From 5.50 EUR');
+
+            $catalog = $client->request('GET', '/explore');
+            $client->click($catalog->selectLink('Tea shop')->link());
+            self::assertSelectorTextContains('.explore-menu', 'Jasmine tea');
+            $catalog = $client->request('GET', '/explore');
+            $client->click($catalog->selectLink('Suggest a store')->link());
+            self::assertSelectorTextContains('.store-form h1', 'Create a bubble tea store');
         } finally {
             static::ensureKernelShutdown();
             if (null === $previousEnv) {

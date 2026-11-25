@@ -8,7 +8,7 @@
 
     <nav class="profile-nav" aria-label="Main navigation">
         <a href="{{ path('app_home') }}"{% if current_route == 'app_home' %} aria-current="page"{% endif %}>Home</a>
-        <span aria-disabled="true">Explore</span>
+        <a href="{{ path('app_explore') }}"{% if current_route in ['app_explore', 'app_explore_store'] %} aria-current="page"{% endif %}>Explore</a>
         <a href="{{ path('app_diary') }}"{% if current_route == 'app_diary' %} aria-current="page"{% endif %}>My Diary</a>
         <a href="{{ path('app_profile') }}"{% if current_route == 'app_profile' %} aria-current="page"{% endif %}>Profile</a>
         {% if is_granted('ROLE_OWNER') %}

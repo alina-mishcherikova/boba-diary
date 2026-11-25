@@ -46,6 +46,21 @@ class DrinkLogRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    /** @return array<int, float> */
+    public function getAverageRatings(int $storeId): array
+    {
+        $ratings = $this->createQueryBuilder('log')
+            ->innerJoin(StoreBubbleTea::class, 'menu', 'ON', 'menu.id = log.store_bubble_tea_id')
+            ->select('IDENTITY(menu.bubbleTea) AS drinkId', 'AVG(log.rating) AS rating')
+            ->andWhere('menu.store_id = :storeId')
+            ->setParameter('storeId', $storeId)
+            ->groupBy('menu.bubbleTea')
+            ->getQuery()
+            ->getArrayResult();
+
+        return array_map('floatval', array_column($ratings, 'rating', 'drinkId'));
+    }
+
     private function forUser(int $userId): QueryBuilder
     {
         return $this->createQueryBuilder('log')

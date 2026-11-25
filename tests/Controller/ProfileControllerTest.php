@@ -185,7 +185,7 @@ final class ProfileControllerTest extends WebTestCase
             self::assertSelectorNotExists('header a[href="/login"]');
             self::assertSame(['Home', 'Explore', 'My Diary', 'Profile', 'My locations'], $crawler->filter('.profile-nav > *')->each(static fn ($item) => $item->text()));
             self::assertSame(['Search', 'Log a drink'], $crawler->filter('.profile-topbar-actions button[disabled]')->each(static fn ($button) => $button->text()));
-            self::assertSelectorCount(1, '.profile-nav [aria-disabled="true"]');
+            self::assertSelectorCount(1, '.profile-nav a[href="/explore"]');
             self::assertSelectorExists('.profile-nav a[href="/diary"]');
 
             if (null === $currentLabel) {
