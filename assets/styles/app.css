@@ -561,20 +561,32 @@ form > * {
 .explore-card {
     color: inherit;
     text-decoration: none;
+    padding-bottom: 1rem;
+}
+
+article.explore-card {
+    display: flex;
+    flex-direction: column;
 }
 
 .explore-card > div,
 .explore-suggest {
     padding: 1rem;
+    padding-bottom: 0rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+article.explore-card > div {
+    flex: 1;
 }
 
 .explore-card h2 {
     font-size: 1rem;
-    margin: 0 0 0.4rem;
 }
-
 .explore-card p,
-.explore-menu p {
+.explore-card h2 {
     margin: 0;
 }
 
@@ -593,7 +605,7 @@ form > * {
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    padding-top: 0.75rem;
+    margin-top: auto;
 }
 
 .profile-price {
