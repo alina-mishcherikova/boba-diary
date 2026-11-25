@@ -9,6 +9,7 @@ use App\Entity\StoreBubbleTea;
 use App\Entity\User;
 use App\Enum\IceLevel;
 use App\Enum\SugarLevel;
+use App\Enum\Temperature;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Tools\SchemaTool;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
@@ -57,6 +58,9 @@ final class ProfileControllerTest extends WebTestCase
         $this->client->request('GET', '/profile');
         self::assertResponseRedirects('/login');
 
+        $this->client->request('GET', '/diary');
+        self::assertResponseRedirects('/login');
+
         $this->client->loginUser($user);
         $this->client->request('GET', '/profile');
         self::assertResponseIsSuccessful();
@@ -71,9 +75,14 @@ final class ProfileControllerTest extends WebTestCase
         self::assertSelectorNotExists('.profile-nav a[href="/my-locations"]');
         self::assertSelectorExists('.profile-suggest a[href="/bubble/tea"]');
         self::assertSelectorNotExists('.profile-suggest a[href="/store"]');
+        self::assertSelectorExists('.profile-diary-link[href="/diary"]');
+
+        $this->client->request('GET', '/diary');
+        self::assertResponseIsSuccessful();
+        self::assertSelectorTextContains('.tasting-empty', 'logged any drinks yet');
     }
 
-    public function testProfileDisplaysOnlyTheSignedInUsersActivity(): void
+    public function testProfileAndDiaryDisplayOnlyTheSignedInUsersActivity(): void
     {
         $now = new \DateTimeImmutable();
         $user = $this->createUser('mira')->setRoles(['ROLE_OWNER']);
@@ -107,12 +116,16 @@ final class ProfileControllerTest extends WebTestCase
         }
         $this->entityManager->flush();
 
-        $this->addLog($user, $menuItem, $now->modify('-1 day'), '4.5', 'First tasting')
+        $this->addLog($user, $menuItem, new \DateTimeImmutable('2026-09-16 12:00'), '4.5', 'First tasting')
             ->setSugarLevel(SugarLevel::Half)
-            ->setIceLevel(IceLevel::Less);
-        $this->addLog($user, $menuItem, $now->modify('-2 days'), '4.0', 'Second tasting');
-        $this->addLog($user, $menuItem, $now->modify('-8 days'), '5.0', 'Earlier tasting');
-        $this->addLog($other, $menuItem, $now->modify('-1 day'), '1.0', 'Another user’s note');
+            ->setIceLevel(IceLevel::Less)
+            ->setTemperature(Temperature::Cold)
+            ->setPhotoUrl('/images/home/matcha-pearl-latte.png');
+        $this->addLog($user, $menuItem, new \DateTimeImmutable('2026-09-11 12:00'), '4.0', 'Second tasting');
+        $this->addLog($user, $menuItem, new \DateTimeImmutable('2026-08-28 12:00'), '5.0', 'Earlier tasting');
+        $this->addLog($user, $menuItem, new \DateTimeImmutable('2026-08-19 12:00'), '5.0', 'Fourth tasting');
+        $this->addLog($user, $menuItem, new \DateTimeImmutable('2026-08-05 12:00'), '5.0', 'Oldest tasting');
+        $this->addLog($other, $menuItem, new \DateTimeImmutable('2026-10-11 12:00'), '1.0', 'Another user’s note');
         $this->entityManager->flush();
         $this->entityManager->clear();
 
@@ -120,20 +133,36 @@ final class ProfileControllerTest extends WebTestCase
         $crawler = $this->client->request('GET', '/profile');
 
         self::assertResponseIsSuccessful();
-        self::assertSame(['3', '1'], $crawler->filter('.profile-stats dd')->each(static fn ($value) => $value->text()));
-        self::assertSelectorCount(3, '.profile-entry');
+        self::assertSame(['5', '1'], $crawler->filter('.profile-stats dd')->each(static fn ($value) => $value->text()));
+        self::assertSelectorCount(4, '.profile-entry');
         self::assertSelectorTextContains('.profile-entry:first-child', 'Matcha Pearl Latte');
         self::assertSelectorTextContains('.profile-entry:first-child', 'Tea Lab · Brooklyn');
         self::assertSelectorTextContains('.profile-entry:first-child', 'First tasting');
         self::assertSelectorTextContains('.profile-entry:first-child', '50% sugar');
         self::assertSelectorTextContains('.profile-entry:first-child', 'Less ice');
         self::assertSelectorExists('.profile-entry:first-child img[src$="/rating-half.svg"]');
-        self::assertSelectorTextContains('.profile-entry:last-child', 'Earlier tasting');
+        self::assertSelectorTextContains('.profile-entry:last-child', 'Fourth tasting');
+        self::assertSelectorTextNotContains('main', 'Oldest tasting');
         self::assertSelectorTextNotContains('main', 'Another user’s');
         self::assertSelectorCount(1, '.profile-added-row');
         self::assertSelectorTextContains('.profile-added-row', 'Matcha Pearl Latte');
         self::assertSelectorExists('.profile-suggest a[href="/store"]');
         self::assertSelectorExists('.profile-nav a[href="/my-locations"]');
+
+        $crawler = $this->client->request('GET', '/diary?user='.$other->getId());
+        self::assertResponseIsSuccessful();
+        self::assertSame(['September 2026', 'August 2026'], $crawler->filter('.tasting-month h2')->each(static fn ($heading) => $heading->text()));
+        self::assertSelectorTextContains('.tasting-month:first-child .tasting-month-heading', '2 entries · avg 4.3');
+        self::assertSelectorTextContains('.tasting-month:last-child .tasting-month-heading', '3 entries · avg 5.0');
+        self::assertSelectorCount(5, '.tasting-entry');
+        self::assertSelectorTextContains('.tasting-entry:first-child', 'Tea Lab · Brooklyn');
+        self::assertSelectorTextContains('.tasting-entry:first-child', '50% sugar · cold · less ice');
+        self::assertSelectorTextContains('.tasting-entry:first-child time', '16 Sep 2026');
+        self::assertSelectorExists('.tasting-entry:first-child img.tasting-thumbnail[src="/images/home/matcha-pearl-latte.png"]');
+        self::assertSelectorCount(4, '.tasting-thumbnail-empty');
+        self::assertSelectorTextContains('.tasting-thumbnail-empty', 'No photo');
+        self::assertSelectorNotExists('#month-2026-10');
+        self::assertSelectorTextNotContains('main', 'Show older entries');
     }
 
     public function testSignedInPagesShareNavigation(): void
@@ -145,6 +174,7 @@ final class ProfileControllerTest extends WebTestCase
         foreach ([
             '/' => ['Home', 'page'],
             '/profile' => ['Profile', 'page'],
+            '/diary' => ['My Diary', 'page'],
             '/my-locations' => ['My locations', 'page'],
             '/store' => ['My locations', 'location'],
             '/bubble/tea' => [null, null],
@@ -156,7 +186,8 @@ final class ProfileControllerTest extends WebTestCase
             self::assertSelectorNotExists('header a[href="/login"]');
             self::assertSame(['Home', 'Explore', 'My Diary', 'Profile', 'My locations'], $crawler->filter('.profile-nav > *')->each(static fn ($item) => $item->text()));
             self::assertSame(['Search', 'Log a drink'], $crawler->filter('.profile-topbar-actions button[disabled]')->each(static fn ($button) => $button->text()));
-            self::assertSelectorCount(2, '.profile-nav [aria-disabled="true"]');
+            self::assertSelectorCount(1, '.profile-nav [aria-disabled="true"]');
+            self::assertSelectorExists('.profile-nav a[href="/diary"]');
 
             if (null === $currentLabel) {
                 self::assertSelectorNotExists('.profile-nav [aria-current]');
