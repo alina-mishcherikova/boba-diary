@@ -578,6 +578,16 @@ form > * {
     margin: 0;
 }
 
+.drink-description {
+    display: -webkit-box;
+    color: #6b6875;
+    height: 2.4rem;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    overflow-wrap: anywhere;
+}
+
 .drink-details {
     display: flex;
     flex-direction: row;

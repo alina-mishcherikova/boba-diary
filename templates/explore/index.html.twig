@@ -27,7 +27,7 @@
                     {% include '_photo.html.twig' with {url: drink.imageUrl, class: 'explore-card-photo'} only %}
                     <div>
                         <h2>{{ drink.name }}</h2>
-                        {% if drink.description %}<p>{{ drink.description }}</p>{% endif %}
+                        {% if drink.description %}<p class="drink-description">{{ drink.description }}</p>{% endif %}
                         <div class="drink-details">
                             <p class="profile-label">At {{ locations|length }} stores</p>
                             {% set priced = locations|filter(item => item.storeId.currency and item.price is not null) %}

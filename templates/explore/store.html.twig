@@ -21,7 +21,7 @@
                     {% include '_photo.html.twig' with {url: item.bubbleTea.imageUrl, class: 'explore-menu-photo'} only %}
                     <div>
                         <strong>{{ item.bubbleTea.name }}</strong>
-                        {% if item.bubbleTea.description %}<p>{{ item.bubbleTea.description }}</p>{% endif %}
+                        {% if item.bubbleTea.description %}<p class="drink-description">{{ item.bubbleTea.description }}</p>{% endif %}
                     </div>
                     {% if not item.available %}<span>Sold out</span>{% endif %}
                     {% if ratings[item.bubbleTea.id] is defined %}

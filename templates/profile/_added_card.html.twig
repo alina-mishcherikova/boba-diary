@@ -3,7 +3,7 @@
     <div class="profile-added-info">
         <h3>{{ bubbleTea.name }}</h3>
         {% if bubbleTea.description %}
-            <p class="profile-added-description">{{ bubbleTea.description }}</p>
+            <p class="profile-added-description drink-description">{{ bubbleTea.description }}</p>
         {% endif %}
     </div>
     <span class="profile-label profile-badge{{ bubbleTea.inactivatedAt ? ' profile-badge-inactive' : '' }}">
