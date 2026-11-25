@@ -1,20 +1,47 @@
+{% set log = entry[0] %}
+{% set image = log.photoUrl ?: entry.drinkImage %}
+{% set iceLabels = {None: 'No ice', Less: 'Less ice', Normal: 'Regular ice'} %}
+{% set temperatureLabels = {Cold: 'Cold', Lukewarm: 'Lukewarm', Hot: 'Hot'} %}
+<article class="profile-entry">
+    {% if image %}
+        <img class="profile-entry-photo" src="{{ image }}" alt="" loading="lazy">
+    {% else %}
+        <div class="profile-entry-photo profile-photo-placeholder" aria-hidden="true"></div>
+    {% endif %}
 
-<a class="diary-entry" aria-labelledby="entry-title">
-    {# <div class="diary-entry-photo photo-placeholder" role="img" aria-label="Drink photo placeholder"></div> #}
-    <div class="diary-entry-content">
-        <div class="diary-entry-heading">
-            <h3 id="entry-title">{{ bubbleTea.name }}</h3>
-            <p>{{bubbleTea.description}}</p>
-            {# <span class="diary-rating" role="img" class="diary-rating-half"></span>
-            </span>#}
+    <div class="profile-entry-body">
+        <h3>{{ entry.drinkName ?? 'Drink entry' }}</h3>
+        {% if entry.storeName %}
+            <p class="profile-label">{{ entry.storeName }}{% if entry.storeCity %} · {{ entry.storeCity }}{% endif %}</p>
+        {% endif %}
+        <div class="profile-rating-row">
+            <div class="profile-rating" role="img" aria-label="{{ log.rating|number_format(1) }} out of 5">
+                <span class="profile-rating-pearls" aria-hidden="true">
+                    {% set pearls = (log.rating * 2)|round / 2 %}
+                    {% for position in 1..5 %}
+                        {% set fill = pearls >= position ? 'full' : (pearls > position - 1 ? 'half' : 'empty') %}
+                        <img src="{{ asset('images/profile/rating-' ~ fill ~ '.svg') }}" width="10" height="10" alt="">
+                    {% endfor %}
+                </span>
+                <span aria-hidden="true">{{ log.rating|number_format(1) }}</span>
+            </div>
+            <time datetime="{{ log.consumedAt|date('c') }}">{{ log.consumedAt|date('d M', 'Europe/Paris') }}</time>
         </div>
-        {# <p class="diary-entry-store">Bubble House · Brooklyn</p> #}
-        {# <p class="diary-entry-note">“Nutty, not too sweet — the pearls were perfect that day.”</p> #}
-        {# <ul class="diary-entry-tags" aria-label="Drink preferences">
-            <li>50% sugar</li>
-            <li>Less ice</li>
-            <li class="diary-tag-topping">Tapioca</li>
-        </ul> #}
-        <time class="diary-entry-date">{{ bubbleTea.createdAt|date('d/m/Y H:i', 'Europe/Paris')}}</time>
+        {% if log.note %}
+            <p class="profile-note">“{{ log.note }}”</p>
+        {% endif %}
+        {% if log.sugarLevel or log.iceLevel or log.temperature %}
+            <ul class="profile-chips" aria-label="Drink preferences">
+                {% if log.sugarLevel %}
+                    <li class="profile-chip profile-chip-accent">{{ log.sugarLevel.label()|replace({' %': '%'}) }} sugar</li>
+                {% endif %}
+                {% if log.iceLevel %}
+                    <li class="profile-chip">{{ iceLabels[log.iceLevel.name] }}</li>
+                {% endif %}
+                {% if log.temperature %}
+                    <li class="profile-chip">{{ temperatureLabels[log.temperature.name] }}</li>
+                {% endif %}
+            </ul>
+        {% endif %}
     </div>
-</a>
+</article>

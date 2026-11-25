@@ -1,8 +1,17 @@
-
-<a class="added_card" aria-labelledby="added-title">
-        <div class="added_card-heading">
-            <h4 class="added-title">{{ bubbleTea.name }}</h4>
-        </div>
-        <time class="diary-entry-date">{{ bubbleTea.createdAt|date('d/m/Y', 'Europe/Paris')}}</time>
+<li class="profile-added-row">
+    {% if bubbleTea.imageUrl %}
+        <img class="profile-added-photo" src="{{ bubbleTea.imageUrl }}" alt="" loading="lazy">
+    {% else %}
+        <div class="profile-added-photo profile-photo-placeholder" aria-hidden="true"></div>
+    {% endif %}
+    <div class="profile-added-info">
+        <h3>{{ bubbleTea.name }}</h3>
+        {% if bubbleTea.description %}
+            <p class="profile-added-description">{{ bubbleTea.description }}</p>
+        {% endif %}
     </div>
-</a>
+    <span class="profile-label profile-badge{{ bubbleTea.inactivatedAt ? ' profile-badge-inactive' : '' }}">
+        {{ bubbleTea.inactivatedAt ? 'Inactive' : 'In catalog' }}
+    </span>
+    <time class="profile-label profile-muted" datetime="{{ bubbleTea.createdAt|date('c') }}">{{ bubbleTea.createdAt|date('d M', 'Europe/Paris') }}</time>
+</li>

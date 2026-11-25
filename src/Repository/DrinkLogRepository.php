@@ -3,7 +3,9 @@
 namespace App\Repository;
 
 use App\Entity\DrinkLog;
+use App\Entity\StoreBubbleTea;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -16,28 +18,39 @@ class DrinkLogRepository extends ServiceEntityRepository
         parent::__construct($registry, DrinkLog::class);
     }
 
-//    /**
-//     * @return DrinkLog[] Returns an array of DrinkLog objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('d')
-//            ->andWhere('d.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('d.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    /** @return array{drinksTried: int, storesVisited: int} */
+    public function getProfileStats(int $userId): array
+    {
+        $stats = $this->forUser($userId)
+            ->select('COUNT(log.id) AS drinksTried', 'COUNT(DISTINCT IDENTITY(menu.store_id)) AS storesVisited')
+            ->getQuery()
+            ->getSingleResult();
 
-//    public function findOneBySomeField($value): ?DrinkLog
-//    {
-//        return $this->createQueryBuilder('d')
-//            ->andWhere('d.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+        return [
+            'drinksTried' => (int) $stats['drinksTried'],
+            'storesVisited' => (int) $stats['storesVisited'],
+        ];
+    }
+
+    /** @return list<array{0: DrinkLog, drinkName: ?string, drinkImage: ?string, storeName: ?string, storeCity: ?string}> */
+    public function findRecentForProfile(int $userId): array
+    {
+        return $this->forUser($userId)
+            ->addSelect('tea.name AS drinkName', 'tea.image_url AS drinkImage', 'store.name AS storeName', 'store.city AS storeCity')
+            ->leftJoin('menu.bubbleTea', 'tea')
+            ->leftJoin('menu.store_id', 'store')
+            ->orderBy('log.consumed_at', 'DESC')
+            ->addOrderBy('log.id', 'DESC')
+            ->setMaxResults(4)
+            ->getQuery()
+            ->getResult();
+    }
+
+    private function forUser(int $userId): QueryBuilder
+    {
+        return $this->createQueryBuilder('log')
+            ->leftJoin(StoreBubbleTea::class, 'menu', 'ON', 'menu.id = log.store_bubble_tea_id')
+            ->andWhere('log.user_id = :userId')
+            ->setParameter('userId', $userId);
+    }
 }

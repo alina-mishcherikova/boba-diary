@@ -3,33 +3,23 @@
 namespace App\Controller;
 
 use App\Entity\User;
-use App\Repository\StoreRepository;
-use Symfony\Component\Security\Http\Attribute\CurrentUser;
-
+use App\Repository\DrinkLogRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\CurrentUser;
 
 final class ProfileController extends AbstractController
 {
-    #[Route('/profile', name: 'app_profile')]
-    public function index( #[CurrentUser] User $user,
-    StoreRepository $storeRepository,): Response
+    #[Route('/profile', name: 'app_profile', methods: ['GET'])]
+    public function index(#[CurrentUser] User $user, DrinkLogRepository $drinkLogs): Response
     {
-        $stores = $storeRepository->findBy(
-        ['created_by' => $user],
-        ['created_at' => 'DESC', 'id' => 'DESC']
-    );
-
-
-        if (!$user instanceof User) {
-            throw $this->createAccessDeniedException();
-        }
+        $userId = $user->getId();
 
         return $this->render('profile/index.html.twig', [
-            'controller_name' => 'ProfileController',
             'bubbleTeas' => $user->getBubbleTeas(),
-            'stores' => $stores,
+            'recentEntries' => $drinkLogs->findRecentForProfile($userId),
+            'stats' => $drinkLogs->getProfileStats($userId),
         ]);
     }
 }

@@ -1,57 +1,95 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Home · boba diary{% endblock %}
+{% block title %}Profile · boba diary{% endblock %}
 
 {% block body %}
-  {{ parent() }}
-    <main class="diary-main">
-        <section class="diary-greeting" aria-labelledby="greeting-title">
-            <h1>Evening, {{ app.user.name }}! </h1>
-            {# <div class="diary-greeting-actions">
-                <a class="btn btn-secondary" href="#recently-sipped">Open my journal</a>
-            </div> #}
-            <p>
-        </section>
-        <section class="diary-recent" >
-        <div class="diary-section-title">
-         <h2 id="recent-title">Drinks you added</h2>
-         </div >
-               <div >
-                {% for bubbleTea in bubbleTeas %}
-                    {% include 'profile/_added_card.html.twig' with { 'bubbleTea': bubbleTea } %}
-                    {% else %}
-                    <p>You didn't add any bubble tea</p>
-                {% endfor %}
+    <main class="profile-main">
+        <section class="profile-summary" aria-labelledby="profile-name">
+            <div class="profile-identity">
+                <h1 id="profile-name">{{ app.user.name }}</h1>
+                <p class="profile-label">@{{ app.user.username }} · Keeping this diary since {{ app.user.createdAt|date('F Y', 'Europe/Paris') }}</p>
             </div>
+
+            <dl class="profile-stats">
+                <div>
+                    <dt class="profile-label">Drinks tried</dt>
+                    <dd>{{ stats.drinksTried }}</dd>
+                </div>
+                <div>
+                    <dt class="profile-label">Stores visited</dt>
+                    <dd>{{ stats.storesVisited }}</dd>
+                </div>
+            </dl>
+
+            <div class="profile-summary-actions">
+                {% include '_disabled_button.html.twig' with { label: 'Edit profile', icon: 'tabler:pencil', variant: 'secondary' } only %}
+                {% include '_disabled_button.html.twig' with { label: 'Settings', icon: 'tabler:user', variant: 'secondary' } only %}
+            </div>
+        </section>
+
+        <section class="profile-recent" aria-labelledby="recent-title">
+            <div class="profile-section-heading">
+                <h2 id="recent-title">Recently sipped</h2>
+                <button class="profile-diary-link" type="button" disabled>Open my diary</button>
+            </div>
+            {% if recentEntries is empty %}
+                <p class="profile-empty">You haven’t logged any drinks yet.</p>
+            {% else %}
+                <div class="profile-entry-grid">
+                    {% for entry in recentEntries %}
+                        {% include 'profile/_entry_card.html.twig' with { entry: entry } only %}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </section>
+
+        <div class="profile-contributions">
+            <section class="profile-added" aria-labelledby="added-title">
+                <div class="profile-section-heading">
+                    <h2 id="added-title">Drinks you added</h2>
+                    <span class="profile-label profile-muted">{{ bubbleTeas|length }} {{ bubbleTeas|length == 1 ? 'suggestion' : 'suggestions' }}</span>
+                </div>
+                {% if bubbleTeas is empty %}
+                    <p class="profile-empty">You haven’t added any drinks yet.</p>
+                {% else %}
+                    <ul class="profile-added-list">
+                        {% for bubbleTea in bubbleTeas %}
+                            {% include 'profile/_added_card.html.twig' with { bubbleTea: bubbleTea } only %}
+                        {% endfor %}
+                    </ul>
+                {% endif %}
             </section>
 
-                <section class="diary-recent" id="recently-sipped" aria-labelledby="recent-title">
-            <div class="diary-section-heading">
-                <div class="diary-section-title">
-                    <h2 id="recent-title">Recently sipped</h2>
-                    {# <span class="diary-entry-count">{bubbleTea|lenght}</span> #}
+            <aside class="profile-suggest" aria-labelledby="suggest-title">
+                <div>
+                    <h2 id="suggest-title">Know a spot we don’t?</h2>
+                    <p>Add a store or a drink to the catalog.</p>
                 </div>
-   
-            </div>
-            {# <div class="diary-entry-grid">
-                {% for bubbleTea in bubbleTeas %}
-                    {% include 'profile/_entry_card.html.twig' with { 'bubbleTea': bubbleTea } %}
+                <img class="profile-shop-photo" src="{{ asset('images/profile/tea-shop.png') }}" alt="">
+                <div class="profile-suggest-actions">
+                    {% if is_granted('ROLE_OWNER') %}
+                        <a class="btn profile-button profile-button-dark" href="{{ path('app_store') }}">Suggest a store</a>
                     {% else %}
-                    <p>You didn't add any bubble tea</p>
-                {% endfor %}
-            </div> #}
-        </section>
-        {# <section class="diary-recent" id="recently-sipped" aria-labelledby="recent-title">
-            <div class="diary-section-title">
-            <h2 id="recent-title">Bubble Tea stores</h2>
-            </div>
-            <div class="diary-entry-grid">
-                {% for store in stores %}
-                    {% include 'profile/_store_card.html.twig' with { 'store': store } %}
-                    {% else %}
-                    <p>You didn't add any store tea</p>
-                {% endfor %}
-            </div>
-        </section> #}
+                        <button class="btn profile-button profile-button-dark" type="button" disabled>Suggest a store</button>
+                    {% endif %}
+                    <a class="btn btn-secondary profile-button" href="{{ path('app_bubble_tea') }}">Suggest a drink</a>
+                </div>
+            </aside>
+        </div>
     </main>
+
+    <footer class="profile-footer">
+        <div class="profile-footer-brand">
+            <a class="profile-brand" href="{{ path('app_home') }}">
+                <img src="{{ asset('images/profile/pearls.svg') }}" width="24" height="6" alt="">
+                <span>boba diary</span>
+            </a>
+            <span class="profile-label profile-muted">A personal drinking record · {{ 'now'|date('Y') }}</span>
+        </div>
+        <div class="profile-footer-links">
+            <span aria-disabled="true">Privacy</span>
+            <span aria-disabled="true">Export your data</span>
+            <span aria-disabled="true">Contact</span>
+        </div>
+    </footer>
 {% endblock %}
