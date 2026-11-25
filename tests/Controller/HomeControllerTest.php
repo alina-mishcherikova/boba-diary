@@ -17,6 +17,8 @@ final class HomeControllerTest extends WebTestCase
         self::assertResponseIsSuccessful();
         self::assertSelectorTextContains('h1', 'Every bubble tea you’ve ever loved, in one place.');
         self::assertSelectorExists('header a[href="/login"]');
+        self::assertSelectorExists('header.home-header a[href="#signup"]');
+        self::assertSelectorNotExists('header.profile-topbar');
         self::assertSelectorExists('main a[href="#inside-the-app"]');
         self::assertSelectorCount(4, '#inside-the-app article');
         self::assertSelectorExists('#signup form[method="post"][action="/#signup"]');
