@@ -46,13 +46,13 @@ class DrinkLog
     private ?int $paid_currency_id = null;
 
     #[ORM\Column(type: Types::INTEGER, nullable: true, enumType: Temperature::class)]
-    private ?int $temperature = null;
+    private ?Temperature $temperature = null;
 
     #[ORM\Column(type: Types::INTEGER, nullable: true, enumType: SugarLevel::class)]
-    private ?int $sugar_level = null;
+    private ?SugarLevel $sugar_level = null;
 
     #[ORM\Column(type: Types::INTEGER, nullable: true, enumType: IceLevel::class)]
-    private ?int $ice_level = null;
+    private ?IceLevel $ice_level = null;
 
     public function getId(): ?int
     {
