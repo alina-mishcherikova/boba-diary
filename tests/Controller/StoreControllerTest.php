@@ -10,12 +10,15 @@ use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Tools\SchemaTool;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 final class StoreControllerTest extends WebTestCase
 {
     public function testCreateStore(): void
     {
         $databasePath = tempnam(sys_get_temp_dir(), 'store-test-');
+        $photoPath = tempnam(sys_get_temp_dir(), 'catalog-photo-');
+        $savedPhotoPath = null;
         $previousEnv = $_ENV['DATABASE_URL'] ?? null;
         $previousServer = $_SERVER['DATABASE_URL'] ?? null;
         $_ENV['DATABASE_URL'] = $_SERVER['DATABASE_URL'] = 'sqlite:///'.$databasePath;
@@ -44,12 +47,14 @@ final class StoreControllerTest extends WebTestCase
             $crawler = $client->request('GET', '/store');
 
             self::assertResponseIsSuccessful();
-            self::assertSelectorTextContains('.store-form h1', 'Create a bubble tea store');
+            self::assertSelectorTextContains('.store-form h1', 'Add a new store');
             self::assertSelectorCount(1, '.store-form form[name="store"] .rows');
             foreach (['name', 'address', 'city', 'country', 'postal_code'] as $field) {
                 self::assertSelectorExists('.store-form .rows .form-input input[name="store['.$field.']"]');
             }
-            self::assertSelectorExists('.store-form button.btn-full[type="submit"]');
+            self::assertSelectorExists('.store-form input[type="file"]');
+            self::assertSelectorNotExists('.store-form input[type="search"], .store-form [data-catalog-listings]');
+            self::assertSelectorExists('.store-form button[type="submit"]');
 
             $client->submit($crawler->selectButton('Save')->form([
                 'store[name]' => 'Tea shop',
@@ -78,28 +83,43 @@ final class StoreControllerTest extends WebTestCase
             self::assertSelectorTextContains('h1', 'Tea shop');
             self::assertSelectorTextContains('.explore-menu', 'No drinks on this menu yet.');
 
-            $entityManager = static::getContainer()->get(EntityManagerInterface::class);
-            $drink = (new BubbleTea())->setName('Jasmine tea')->setDescription('Jasmine and pearls')
-                ->setCreatedAt($now)->setCreatedBy($entityManager->getReference(User::class, $user->getId()));
-            $item = (new StoreBubbleTea())->setBubbleTea($drink)->setPrice('5.50')
-                ->setCreatedAt($now)->setIsAvailable(true)
-                ->setStoreId($entityManager->getReference(Store::class, $saved->getId()));
-            $entityManager->persist($drink);
-            $entityManager->persist($item);
-            $entityManager->flush();
+            $drinkForm = $client->request('GET', '/bubble/tea');
+            self::assertResponseIsSuccessful();
+            self::assertSelectorExists('.bubble-tea-form input[type="file"]');
+            self::assertSelectorNotExists('.bubble-tea-form input[type="search"], .bubble-tea-form [data-catalog-listings]');
+            $token = $drinkForm->filter('input[name="bubble_tea[_token]"]')->attr('value');
+            $publicPath = static::getContainer()->getParameter('kernel.project_dir').'/public';
+            copy($publicPath.'/images/home/taro-milk-tea.png', $photoPath);
+            $client->request('POST', '/bubble/tea', [
+                'bubble_tea' => [
+                    '_token' => $token,
+                    'name' => 'Jasmine tea',
+                    'description' => 'Jasmine and pearls',
+                ],
+            ], ['bubble_tea' => ['photo' => new UploadedFile($photoPath, 'drink.png', 'image/png', null, true)]]);
+            self::assertResponseRedirects('/profile');
+
+            $drink = static::getContainer()->get(EntityManagerInterface::class)
+                ->getRepository(BubbleTea::class)->findOneBy(['name' => 'Jasmine tea']);
+            self::assertNotNull($drink);
+            self::assertStringStartsWith('/uploads/catalog/', $drink->getImageUrl() ?? '');
+            $savedPhotoPath = $publicPath.$drink->getImageUrl();
+            self::assertFileExists($savedPhotoPath);
 
             $client->request('GET', '/explore/drinks');
             self::assertResponseIsSuccessful();
             self::assertSelectorTextContains('[aria-label="Explore catalog"] [aria-current]', 'Drinks');
             self::assertSelectorTextContains('.explore-card', 'Jasmine tea');
-            self::assertSelectorTextContains('.explore-card', 'From 5.50 EUR');
+            self::assertSelectorTextContains('.explore-card', 'At 0 stores');
 
             $catalog = $client->request('GET', '/explore');
             $client->click($catalog->selectLink('Tea shop')->link());
-            self::assertSelectorTextContains('.explore-menu', 'Jasmine tea');
+            self::assertSelectorTextContains('.explore-menu', 'No drinks on this menu yet.');
+            self::assertSame(0, static::getContainer()->get(EntityManagerInterface::class)
+                ->getRepository(StoreBubbleTea::class)->count());
             $catalog = $client->request('GET', '/explore');
             $client->click($catalog->selectLink('Suggest a store')->link());
-            self::assertSelectorTextContains('.store-form h1', 'Create a bubble tea store');
+            self::assertSelectorTextContains('.store-form h1', 'Add a new store');
         } finally {
             static::ensureKernelShutdown();
             if (null === $previousEnv) {
@@ -113,6 +133,12 @@ final class StoreControllerTest extends WebTestCase
                 $_SERVER['DATABASE_URL'] = $previousServer;
             }
             unlink($databasePath);
+            if (is_file($photoPath)) {
+                unlink($photoPath);
+            }
+            if (null !== $savedPhotoPath && is_file($savedPhotoPath)) {
+                unlink($savedPhotoPath);
+            }
         }
     }
 }

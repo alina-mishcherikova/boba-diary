@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ heading }} · boba diary{% endblock %}
+
+{% block body %}
+    <main class="explore catalog-form {{ form_class }}">
+        <a class="catalog-form-back" href="{{ back_url }}">← {{ back_label }}</a>
+        <header class="catalog-form-heading">
+            <h1>{{ heading }}</h1>
+            <p>{{ introduction }}</p>
+        </header>
+
+        {% for message in app.flashes('success') %}
+            <p role="status">{{ message }}</p>
+        {% endfor %}
+
+        {{ form_start(form) }}
+            {{ form_errors(form) }}
+            {% block panels %}{% endblock %}
+            <div class="catalog-form-actions">
+                <button type="submit" class="btn btn-primary">{{ submit_label }}</button>
+            </div>
+        {{ form_end(form) }}
+    </main>
+    {% include '_diary_footer.html.twig' %}
+{% endblock %}

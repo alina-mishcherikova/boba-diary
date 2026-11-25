@@ -14,6 +14,7 @@ class BubbleTeaType extends AbstractType
         $builder
             ->add('name')
             ->add('description')
+            ->add('photo', CatalogPhotoType::class)
         ;
     }
 

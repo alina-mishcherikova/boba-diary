@@ -1,0 +1,11 @@
+<section class="catalog-form-panel catalog-form-photo">
+    <h2 class="profile-label">Photo</h2>
+    <label class="catalog-upload">
+        {{ ux_icon('tabler:camera', {width: 24, height: 24, fill: 'none', 'aria-hidden': 'true'}) }}
+        <span>Drop a photo, or browse</span>
+        <small class="profile-label">One image · JPG, PNG or WebP · Optional</small>
+        <span data-catalog-filename aria-live="polite"></span>
+        {{ form_widget(field, {attr: {'aria-label': 'Choose a photo', 'data-catalog-upload': true}}) }}
+    </label>
+    {{ form_errors(field) }}
+</section>

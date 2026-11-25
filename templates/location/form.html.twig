@@ -1,0 +1,24 @@
+{% extends '_catalog_form.html.twig' %}
+
+{% set heading = page_title|default('Add a new store') %}
+{% set form_class = 'store-form' %}
+{% set back_url = page_title is defined ? path('app_my_locations') : path('app_explore') %}
+{% set back_label = page_title is defined ? 'Back to My locations' : 'Back to Explore' %}
+{% set introduction = page_title is defined ? 'Update the location details.' : 'Can’t find your spot? Tell us where it is.' %}
+{% set submit_label = 'Save' %}
+
+{% block panels %}
+    <section class="catalog-form-panel rows">
+        <h2 class="profile-label">Basics</h2>
+        {{ form_row(form.name, {label: 'Store name', row_attr: {class: 'form-input'}}) }}
+        {{ form_row(form.address, {label: 'Street address', row_attr: {class: 'form-input'}}) }}
+        <div class="catalog-form-fields">
+            {{ form_row(form.city, {row_attr: {class: 'form-input'}}) }}
+            {{ form_row(form.country, {row_attr: {class: 'form-input'}}) }}
+            {{ form_row(form.postal_code, {label: 'Postal code', row_attr: {class: 'form-input'}}) }}
+            {{ form_row(form.currency, {row_attr: {class: 'form-input'}}) }}
+        </div>
+    </section>
+
+    {% include 'catalog/_photo_upload.html.twig' with {field: form.photo} only %}
+{% endblock %}

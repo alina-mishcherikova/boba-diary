@@ -1,31 +1,21 @@
-{% extends 'base.html.twig' %}
+{% extends '_catalog_form.html.twig' %}
 
-{% block title %}Create a bubble tea{% endblock %}
+{% set heading = 'Add a new drink' %}
+{% set form_class = 'bubble-tea-form' %}
+{% set back_url = path('app_explore', {tab: 'drinks'}) %}
+{% set back_label = 'Back to Explore' %}
+{% set introduction = 'Found something the catalog doesn’t have yet? Tell us about the drink.' %}
+{% set submit_label = 'Save' %}
 
-{% block body %}
-    <section class="form bubble-tea-form">
-        <h1>Create a bubble tea</h1>
-
-        {% for message in app.flashes('success') %}
-            <p role="status">{{ message }}</p>
-        {% endfor %}
-
-        {{ form_start(form) }}
-            {{ form_errors(form) }}
-            <div class="rows">
-                {{ form_row(form.name, {
-                    label: 'Name',
-                    label_attr: {class: 'required'},
-                    attr: {placeholder: 'Enter the name of the bubble tea'},
-                    row_attr: {class: 'form-input'}
-                }) }}
-                {{ form_row(form.description, {
-                    label: 'Description',
-                    attr: {placeholder: 'Enter the description of the bubble tea'},
-                    row_attr: {class: 'form-input'}
-                }) }}
-            </div>
-            <button type="submit" class="btn btn-primary btn-full">Save</button>
-        {{ form_end(form) }}
+{% block panels %}
+    <section class="catalog-form-panel rows">
+        <h2 class="profile-label">Basics</h2>
+        {{ form_row(form.name, {
+            label: 'Drink name',
+            row_attr: {class: 'form-input'}
+        }) }}
+        {{ form_row(form.description, {row_attr: {class: 'form-input'}}) }}
     </section>
+
+    {% include 'catalog/_photo_upload.html.twig' with {field: form.photo} only %}
 {% endblock %}

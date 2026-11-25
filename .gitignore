@@ -83,3 +83,5 @@ install-log.txt
 npm-debug.log
 yarn-error.log
 ###< symfony/webpack-encore-bundle ###
+
+/public/uploads/catalog/

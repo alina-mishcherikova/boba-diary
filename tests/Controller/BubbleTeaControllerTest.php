@@ -55,7 +55,7 @@ final class BubbleTeaControllerTest extends WebTestCase
             ]);
             $client->submit($form);
 
-            self::assertResponseRedirects('/bubble/tea');
+            self::assertResponseRedirects('/profile');
             $saved = static::getContainer()->get(EntityManagerInterface::class)
                 ->getRepository(BubbleTea::class)->findOneBy(['name' => 'Jasmine milk tea']);
             self::assertNotNull($saved);
@@ -69,7 +69,7 @@ final class BubbleTeaControllerTest extends WebTestCase
 
             $client->followRedirect();
             self::assertResponseIsSuccessful();
-            self::assertSelectorTextContains('p', 'Bubble tea created!');
+            self::assertSelectorTextContains('main', 'Jasmine milk tea');
         } finally {
             static::ensureKernelShutdown();
             if (null === $previousEnv) {

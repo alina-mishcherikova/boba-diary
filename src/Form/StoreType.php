@@ -2,13 +2,13 @@
 
 namespace App\Form;
 
-use App\Entity\Store;
 use App\Entity\Currency;
+use App\Entity\Store;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints as Assert;
 
 class StoreType extends AbstractType
 {
@@ -26,6 +26,7 @@ class StoreType extends AbstractType
                 'placeholder' => 'Choose a currency',
                 'constraints' => [new Assert\NotNull()],
             ])
+            ->add('photo', CatalogPhotoType::class)
         ;
     }
 

@@ -11,3 +11,5 @@ import './styles/home.css';
 
 import './styles/profile.css';
 import './styles/diary.css';
+
+import './catalog/upload.js';

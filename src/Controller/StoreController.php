@@ -5,7 +5,7 @@ namespace App\Controller;
 use App\Entity\Store;
 use App\Entity\User;
 use App\Form\StoreType;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Service\CatalogSubmission;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,7 +17,7 @@ final class StoreController extends AbstractController
 {
     #[Route('/store', name: 'app_store', methods: ['GET', 'POST'])]
     #[IsGranted('ROLE_OWNER')]
-    public function newStore(Request $request, EntityManagerInterface $entityManager, #[CurrentUser] User $user): Response
+    public function newStore(Request $request, CatalogSubmission $submission, #[CurrentUser] User $user): Response
     {
         $store = new Store();
 
@@ -28,12 +28,13 @@ final class StoreController extends AbstractController
             $store->setCreatedAt(new \DateTimeImmutable());
             $store->setCreatedBy($user);
 
-            $entityManager->persist($store);
-            $entityManager->flush();
+            $submission->save($store, $form->get('photo')->getData());
 
             return $this->redirectToRoute('app_my_locations');
         }
 
-        return $this->render('store/index.html.twig', ['form' => $form]);
+        return $this->render('location/form.html.twig', [
+            'form' => $form,
+        ]);
     }
 }

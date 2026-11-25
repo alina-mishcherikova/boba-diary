@@ -10,6 +10,7 @@ use App\Form\StoreType;
 use App\Repository\StoreBubbleTeaRepository;
 use App\Repository\StoreRepository;
 use App\Security\Voter\StoreVoter;
+use App\Service\CatalogSubmission;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormError;
@@ -32,18 +33,18 @@ final class LocationController extends AbstractController
 
     #[Route('/my-locations/{id}/edit', name: 'app_location_edit', methods: ['GET', 'POST'], requirements: ['id' => '\d+'])]
     #[IsGranted(StoreVoter::MANAGE, subject: 'store')]
-    public function edit(Store $store, Request $request, EntityManagerInterface $entityManager): Response
+    public function edit(Store $store, Request $request, CatalogSubmission $submission): Response
     {
         $form = $this->createForm(StoreType::class, $store);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->flush();
+            $submission->save($store, $form->get('photo')->getData());
 
             return $this->redirectToRoute('app_location_menu', ['id' => $store->getId()]);
         }
 
-        return $this->render('store/index.html.twig', [
+        return $this->render('location/form.html.twig', [
             'form' => $form,
             'page_title' => 'Edit location',
         ]);

@@ -5,7 +5,7 @@ namespace App\Controller;
 use App\Entity\BubbleTea;
 use App\Entity\User;
 use App\Form\BubbleTeaType;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Service\CatalogSubmission;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,7 +17,7 @@ final class BubbleTeaController extends AbstractController
 {
     #[Route('/bubble/tea', name: 'app_bubble_tea', methods: ['GET', 'POST'])]
     #[IsGranted('ROLE_USER')]
-    public function newBubbleTea(Request $request, EntityManagerInterface $entityManager, #[CurrentUser] User $user): Response
+    public function newBubbleTea(Request $request, CatalogSubmission $submission, #[CurrentUser] User $user): Response
     {
         $bubbleTea = new BubbleTea();
 
@@ -28,9 +28,8 @@ final class BubbleTeaController extends AbstractController
             $bubbleTea->setCreatedAt(new \DateTimeImmutable());
             $bubbleTea->setCreatedBy($user);
 
-            $entityManager->persist($bubbleTea);
-            $entityManager->flush();
-            
+            $submission->save($bubbleTea, $form->get('photo')->getData());
+
             return $this->redirectToRoute('app_profile');
         }
 
