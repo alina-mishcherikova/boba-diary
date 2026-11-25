@@ -1,7 +1,15 @@
+body:has(> .tasting-history) {
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+}
+
 .tasting-history {
     display: grid;
     gap: 3rem;
     padding: 3rem var(--profile-gutter) 6rem;
+    flex: 1;
+    align-content: start;
 }
 
 .tasting-history h1,
@@ -109,7 +117,9 @@
     display: grid;
     justify-items: end;
     gap: 0.5rem;
-    font: 400 0.8125rem/1.125rem "DM Mono", monospace;
+    font:
+        400 0.8125rem/1.125rem "DM Mono",
+        monospace;
 }
 
 .tasting-empty {
