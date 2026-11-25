@@ -1,9 +1,5 @@
 <li class="profile-added-row">
-    {% if bubbleTea.imageUrl %}
-        <img class="profile-added-photo" src="{{ bubbleTea.imageUrl }}" alt="" loading="lazy">
-    {% else %}
-        <div class="profile-added-photo profile-photo-placeholder" aria-hidden="true"></div>
-    {% endif %}
+    {% include '_photo.html.twig' with {url: bubbleTea.imageUrl, class: 'profile-added-photo'} only %}
     <div class="profile-added-info">
         <h3>{{ bubbleTea.name }}</h3>
         {% if bubbleTea.description %}

@@ -1,0 +1,7 @@
+<span class="app-photo {{ class }}{% if not url %} app-photo-empty{% endif %}">
+    {% if url %}
+        <img src="{{ url }}" alt="" loading="lazy">
+    {% else %}
+        {{ ux_icon('tabler:photo-off', {width: 24, height: 24, fill: 'none', 'aria-hidden': 'true'}) }}
+    {% endif %}
+</span>

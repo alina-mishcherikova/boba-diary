@@ -8,11 +8,7 @@
 ]|filter(label => label is not null) %}
 
 <li class="tasting-entry">
-    {% if log.photoUrl %}
-        <img class="tasting-thumbnail" src="{{ log.photoUrl }}" width="80" height="80" alt="" loading="lazy">
-    {% else %}
-        <span class="tasting-thumbnail tasting-thumbnail-empty profile-label profile-muted">No photo</span>
-    {% endif %}
+    {% include '_photo.html.twig' with {url: log.photoUrl, class: 'tasting-thumbnail'} only %}
 
     <div class="tasting-info">
         <h3>{{ entry.drinkName ?? 'Drink entry' }}</h3>

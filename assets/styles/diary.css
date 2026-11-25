@@ -82,19 +82,9 @@ body:has(> .tasting-history) {
 
 .tasting-thumbnail {
     box-sizing: border-box;
-    display: block;
     width: 5rem;
     height: 5rem;
     border-radius: 0.75rem;
-    object-fit: cover;
-}
-
-.tasting-thumbnail-empty {
-    display: grid;
-    place-items: center;
-    border: 1px dashed #dfdbd1;
-    background: #f2f0eb;
-    text-align: center;
 }
 
 .tasting-info {

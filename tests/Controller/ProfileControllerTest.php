@@ -158,9 +158,8 @@ final class ProfileControllerTest extends WebTestCase
         self::assertSelectorTextContains('.tasting-entry:first-child', 'Tea Lab · Brooklyn');
         self::assertSelectorTextContains('.tasting-entry:first-child', '50% sugar · cold · less ice');
         self::assertSelectorTextContains('.tasting-entry:first-child time', '16 Sep 2026');
-        self::assertSelectorExists('.tasting-entry:first-child img.tasting-thumbnail[src="/images/home/matcha-pearl-latte.png"]');
-        self::assertSelectorCount(4, '.tasting-thumbnail-empty');
-        self::assertSelectorTextContains('.tasting-thumbnail-empty', 'No photo');
+        self::assertSelectorExists('.tasting-entry:first-child .tasting-thumbnail > img[src="/images/home/matcha-pearl-latte.png"]');
+        self::assertSelectorCount(4, '.tasting-thumbnail.app-photo-empty > svg[fill="none"]');
         self::assertSelectorNotExists('#month-2026-10');
         self::assertSelectorTextNotContains('main', 'Show older entries');
     }

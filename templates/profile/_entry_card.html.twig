@@ -3,11 +3,7 @@
 {% set iceLabels = {None: 'No ice', Less: 'Less ice', Normal: 'Regular ice'} %}
 {% set temperatureLabels = {Cold: 'Cold', Lukewarm: 'Lukewarm', Hot: 'Hot'} %}
 <article class="profile-entry">
-    {% if image %}
-        <img class="profile-entry-photo" src="{{ image }}" alt="" loading="lazy">
-    {% else %}
-        <div class="profile-entry-photo profile-photo-placeholder" aria-hidden="true"></div>
-    {% endif %}
+    {% include '_photo.html.twig' with {url: image, class: 'profile-entry-photo'} only %}
 
     <div class="profile-entry-body">
         <h3>{{ entry.drinkName ?? 'Drink entry' }}</h3>

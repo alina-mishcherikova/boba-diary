@@ -235,14 +235,8 @@
 }
 
 .profile-entry-photo {
-    display: block;
     width: 100%;
     height: 12.5rem;
-    object-fit: cover;
-}
-
-.profile-photo-placeholder {
-    background: #f1ebe0;
 }
 
 .profile-entry-body {
@@ -350,7 +344,6 @@
     width: 2.75rem;
     height: 2.75rem;
     border-radius: 0.5rem;
-    object-fit: cover;
 }
 
 .profile-added-info {
