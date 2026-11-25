@@ -18,7 +18,7 @@ final class ProfileController extends AbstractController
 
         return $this->render('profile/index.html.twig', [
             'bubbleTeas' => $user->getBubbleTeas(),
-            'recentEntries' => $drinkLogs->findRecentForProfile($userId),
+            'recentEntries' => $drinkLogs->findEntriesForUser($userId, limit: 4),
             'stats' => $drinkLogs->getProfileStats($userId),
         ]);
     }

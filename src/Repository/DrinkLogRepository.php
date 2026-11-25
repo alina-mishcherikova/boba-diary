@@ -33,7 +33,7 @@ class DrinkLogRepository extends ServiceEntityRepository
     }
 
     /** @return list<array{0: DrinkLog, drinkName: ?string, drinkImage: ?string, storeName: ?string, storeCity: ?string}> */
-    public function findRecentForProfile(int $userId): array
+    public function findEntriesForUser(int $userId, ?int $limit = null): array
     {
         return $this->forUser($userId)
             ->addSelect('tea.name AS drinkName', 'tea.image_url AS drinkImage', 'store.name AS storeName', 'store.city AS storeCity')
@@ -41,7 +41,7 @@ class DrinkLogRepository extends ServiceEntityRepository
             ->leftJoin('menu.store_id', 'store')
             ->orderBy('log.consumed_at', 'DESC')
             ->addOrderBy('log.id', 'DESC')
-            ->setMaxResults(4)
+            ->setMaxResults($limit)
             ->getQuery()
             ->getResult();
     }
