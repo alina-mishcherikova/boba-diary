@@ -22,33 +22,19 @@
     </head>
     <body>
         {% block header %}
-        <header class="diary-header">
-            <a class="diary-brand" href="{{ path('app_home') }}">
-            <span>boba diary</span>
-            </a>
-
-            <nav class="diary-nav" aria-label="Main navigation">
-                {% if app.user %}
-                    <a class="diary-nav" href="{{ path('app_profile') }}" >Profile</a>
-                    {% if is_granted('ROLE_OWNER') %}
-                        <a href="{{ path('app_my_locations') }}">My locations</a>
-                    {% endif %}
-                {% endif %}
-            </nav>
-
-            <div class="diary-header-actions">
-                {% if app.user %}
-                    {% if is_granted('ROLE_OWNER') %}
-                        <a class="btn btn-primary" href="{{ path('app_bubble_tea') }}">+ Add a bubble tea</a>
-                        <a class="btn btn-primary" href="{{ path('app_store') }}">+ Add a location</a>
-                    {% endif %}
-                    <a class="diary-avatar photo-placeholder" href="{{ path('app_profile') }}" aria-label="Open profile"></a>
-                {% else %}
-                    <a class="btn btn-secondary" href="{{ path('app_login') }}">Sign in</a>
-                    <a class="btn btn-primary" href="{{ path('app_register') }}">Create your diary</a>
-                {% endif %}
-            </div>
-        </header>
+            {% if app.user %}
+                {% include '_authenticated_navigation.html.twig' %}
+            {% else %}
+                <header class="diary-header">
+                    <a class="diary-brand" href="{{ path('app_home') }}">
+                        <span>boba diary</span>
+                    </a>
+                    <div class="diary-header-actions">
+                        <a class="btn btn-secondary" href="{{ path('app_login') }}">Sign in</a>
+                        <a class="btn btn-primary" href="{{ path('app_register') }}">Create your diary</a>
+                    </div>
+                </header>
+            {% endif %}
         {% endblock %}
 
         {% block body %}

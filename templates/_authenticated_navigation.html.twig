@@ -1,0 +1,23 @@
+{% set current_route = app.current_route %}
+
+<header class="profile-topbar">
+    <a class="profile-brand" href="{{ path('app_home') }}">
+        <img src="{{ asset('images/profile/pearls.svg') }}" width="24" height="6" alt="">
+        <span>boba diary</span>
+    </a>
+
+    <nav class="profile-nav" aria-label="Main navigation">
+        <a href="{{ path('app_home') }}"{% if current_route == 'app_home' %} aria-current="page"{% endif %}>Home</a>
+        <span aria-disabled="true">Explore</span>
+        <span aria-disabled="true">My Diary</span>
+        <a href="{{ path('app_profile') }}"{% if current_route == 'app_profile' %} aria-current="page"{% endif %}>Profile</a>
+        {% if is_granted('ROLE_OWNER') %}
+            <a href="{{ path('app_my_locations') }}"{% if current_route == 'app_my_locations' %} aria-current="page"{% elseif current_route in ['app_store', 'app_location_edit', 'app_location_menu'] %} aria-current="location"{% endif %}>My locations</a>
+        {% endif %}
+    </nav>
+
+    <div class="profile-topbar-actions">
+        {% include '_disabled_button.html.twig' with { label: 'Search', icon: 'tabler:search', variant: 'secondary' } only %}
+        {% include '_disabled_button.html.twig' with { label: 'Log a drink', icon: 'tabler:plus', variant: 'primary' } only %}
+    </div>
+</header>
