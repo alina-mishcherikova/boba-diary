@@ -30,7 +30,7 @@
         <section class="profile-recent" aria-labelledby="recent-title">
             <div class="profile-section-heading">
                 <h2 id="recent-title">Recently sipped</h2>
-                <button class="profile-diary-link" type="button" disabled>Open my diary</button>
+                <a class="profile-diary-link" href="{{ path('app_diary') }}">Open my diary</a>
             </div>
             {% if recentEntries is empty %}
                 <p class="profile-empty">You haven’t logged any drinks yet.</p>
@@ -78,18 +78,5 @@
         </div>
     </main>
 
-    <footer class="profile-footer">
-        <div class="profile-footer-brand">
-            <a class="profile-brand" href="{{ path('app_home') }}">
-                <img src="{{ asset('images/profile/pearls.svg') }}" width="24" height="6" alt="">
-                <span>boba diary</span>
-            </a>
-            <span class="profile-label profile-muted">A personal drinking record · {{ 'now'|date('Y') }}</span>
-        </div>
-        <div class="profile-footer-links">
-            <span aria-disabled="true">Privacy</span>
-            <span aria-disabled="true">Export your data</span>
-            <span aria-disabled="true">Contact</span>
-        </div>
-    </footer>
+    {% include '_diary_footer.html.twig' %}
 {% endblock %}

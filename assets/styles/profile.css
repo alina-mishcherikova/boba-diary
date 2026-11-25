@@ -7,6 +7,7 @@
 
 .profile-topbar,
 .profile-main,
+.tasting-history,
 .profile-footer {
     --profile-gutter: clamp(1rem, 3.89vw, 3.5rem);
     --profile-ink: #17161a;
@@ -98,8 +99,7 @@
     line-height: 1.1875rem;
 }
 
-.profile-button:disabled,
-.profile-diary-link:disabled {
+.profile-button:disabled {
     cursor: default;
     opacity: 0.72;
 }
@@ -207,11 +207,13 @@
 
 .profile-diary-link {
     margin-inline-start: auto;
-    padding: 0;
-    border: 0;
-    background: transparent;
     color: var(--profile-brand);
     font: 500 0.8125rem/1.1875rem "DM Sans", sans-serif;
+    text-decoration: none;
+}
+
+.profile-diary-link:hover {
+    text-decoration: underline;
 }
 
 .profile-entry-grid {

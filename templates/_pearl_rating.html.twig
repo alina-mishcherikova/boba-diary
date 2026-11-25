@@ -1,0 +1,10 @@
+<div class="profile-rating" role="img" aria-label="{{ rating|number_format(1) }} out of 5">
+    <span class="profile-rating-pearls" aria-hidden="true">
+        {% set pearls = (rating * 2)|round / 2 %} // Round to the nearest half pearl
+        {% for position in 1..5 %}
+            {% set fill = pearls >= position ? 'full' : (pearls > position - 1 ? 'half' : 'empty') %}
+            <img src="{{ asset('images/profile/rating-' ~ fill ~ '.svg') }}" width="10" height="10" alt="">
+        {% endfor %}
+    </span>
+    <span aria-hidden="true">{{ rating|number_format(1) }}</span>
+</div>

@@ -10,3 +10,4 @@ import './styles/app.css';
 import './styles/home.css';
 
 import './styles/profile.css';
+import './styles/diary.css';

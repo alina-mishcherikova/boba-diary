@@ -1,0 +1,31 @@
+{% set log = entry[0] %}
+{% set temperature_labels = {Cold: 'cold', Lukewarm: 'warm', Hot: 'hot'} %}
+{% set ice_labels = {None: 'no ice', Less: 'less ice', Normal: 'normal ice'} %}
+{% set customizations = [
+    log.sugarLevel ? log.sugarLevel.label()|replace({' %': '%'}) ~ ' sugar' : null,
+    log.temperature ? temperature_labels[log.temperature.name] : null,
+    log.iceLevel ? ice_labels[log.iceLevel.name] : null,
+]|filter(label => label is not null) %}
+
+<li class="tasting-entry">
+    {% if log.photoUrl %}
+        <img class="tasting-thumbnail" src="{{ log.photoUrl }}" width="80" height="80" alt="" loading="lazy">
+    {% else %}
+        <span class="tasting-thumbnail tasting-thumbnail-empty profile-label profile-muted">No photo</span>
+    {% endif %}
+
+    <div class="tasting-info">
+        <h3>{{ entry.drinkName ?? 'Drink entry' }}</h3>
+        {% if entry.storeName %}
+            <p class="profile-label">{{ entry.storeName }}{% if entry.storeCity %} · {{ entry.storeCity }}{% endif %}</p>
+        {% endif %}
+        {% if customizations %}
+            <p class="tasting-customization">{{ customizations|join(' · ') }}</p>
+        {% endif %}
+    </div>
+
+    <div class="tasting-score">
+        {% include '_pearl_rating.html.twig' with {rating: log.rating} only %}
+        <time class="profile-label profile-muted" datetime="{{ log.consumedAt|date('c') }}">{{ log.consumedAt|date('d M Y', 'Europe/Paris') }}</time>
+    </div>
+</li>

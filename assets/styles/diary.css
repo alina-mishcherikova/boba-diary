@@ -1,0 +1,144 @@
+.tasting-history {
+    display: grid;
+    gap: 3rem;
+    padding: 3rem var(--profile-gutter) 6rem;
+}
+
+.tasting-history h1,
+.tasting-history h2,
+.tasting-history h3,
+.tasting-history p,
+.tasting-history ul {
+    margin: 0;
+}
+
+.tasting-history h1 {
+    font: 500 clamp(2.25rem, 4vw, 3.25rem)/1 var(--profile-heading-font);
+    letter-spacing: -0.03em;
+}
+
+.tasting-history-content,
+.tasting-month,
+.tasting-list {
+    display: grid;
+    gap: 1rem;
+    min-width: 0;
+}
+
+.tasting-month + .tasting-month {
+    margin-top: 1.5rem;
+}
+
+.tasting-month-heading {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem 1rem;
+}
+
+.tasting-month-heading h2 {
+    font: 500 1.5rem/1.75rem var(--profile-heading-font);
+    letter-spacing: -0.02em;
+}
+
+.tasting-month-heading::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: var(--profile-border);
+}
+
+.tasting-month-heading p {
+    order: 1;
+}
+
+.tasting-list {
+    padding: 0;
+    list-style: none;
+}
+
+.tasting-entry,
+.tasting-empty {
+    border: 1px solid var(--profile-border);
+    border-radius: 1rem;
+    background: #fff;
+}
+
+.tasting-entry {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 1.25rem;
+    padding: 1rem 1.5rem 1rem 1rem;
+}
+
+.tasting-thumbnail {
+    box-sizing: border-box;
+    display: block;
+    width: 5rem;
+    height: 5rem;
+    border-radius: 0.75rem;
+    object-fit: cover;
+}
+
+.tasting-thumbnail-empty {
+    display: grid;
+    place-items: center;
+    border: 1px dashed #dfdbd1;
+    background: #f2f0eb;
+    text-align: center;
+}
+
+.tasting-info {
+    display: grid;
+    gap: 0.25rem;
+}
+
+.tasting-info h3 {
+    font: 500 1.1875rem/1.5rem var(--profile-heading-font);
+    letter-spacing: -0.015em;
+}
+
+.tasting-customization {
+    color: var(--profile-secondary);
+    font-size: 0.8125rem;
+    line-height: 1.1875rem;
+}
+
+.tasting-score {
+    display: grid;
+    justify-items: end;
+    gap: 0.5rem;
+    font: 400 0.8125rem/1.125rem "DM Mono", monospace;
+}
+
+.tasting-empty {
+    padding: 1rem;
+    color: var(--profile-secondary);
+}
+
+@media (max-width: 40rem) {
+    .tasting-history {
+        gap: 2rem;
+        padding-block: 2rem 3rem;
+    }
+
+    .tasting-entry {
+        grid-template-columns: auto minmax(0, 1fr);
+        gap: 0.75rem;
+        padding: 0.75rem;
+    }
+
+    .tasting-thumbnail {
+        width: 3.75rem;
+        height: 3.75rem;
+    }
+
+    .tasting-score {
+        grid-column: 2;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
+    }
+}

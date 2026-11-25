@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}My Diary · boba diary{% endblock %}
+
+{% block body %}
+    <main class="tasting-history">
+        <h1>My Diary</h1>
+
+        <div class="tasting-history-content">
+            {% for key, month in months %}
+                {% set count = month.entries|length %}
+                <section class="tasting-month" aria-labelledby="month-{{ key }}">
+                    <div class="tasting-month-heading">
+                        <h2 id="month-{{ key }}">{{ month.label }}</h2>
+                        <p class="profile-label profile-muted">{{ count }} {{ count == 1 ? 'entry' : 'entries' }} · avg {{ (month.ratingTotal / count)|number_format(1) }}</p>
+                    </div>
+                    <ul class="tasting-list" role="list">
+                        {% for entry in month.entries %}
+                            {% include 'diary/_entry.html.twig' with {entry: entry} only %}
+                        {% endfor %}
+                    </ul>
+                </section>
+            {% else %}
+                <p class="tasting-empty">You haven’t logged any drinks yet.</p>
+            {% endfor %}
+        </div>
+    </main>
+
+    {% include '_diary_footer.html.twig' %}
+{% endblock %}
